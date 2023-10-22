@@ -17,6 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.contrib import admin
+from django.urls import path
+from authentication.views import home
+from django.urls import path,include
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('', home),
+    path('', include('authentication.urls')),
+
 ]
