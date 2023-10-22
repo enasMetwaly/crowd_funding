@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'user',
     'social_django',
     'crispy_forms',
+    'homepage',
+    'mainproject',
 
 ]
 
@@ -92,7 +94,8 @@ DATABASES = {
         'NAME': 'crowd_funding',
         'USER': 'postgres',
         'PASSWORD': '111',
-        'PORT': 5432
+        'PORT': 5432,
+
     }
 }
 
