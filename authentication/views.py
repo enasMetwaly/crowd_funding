@@ -159,27 +159,22 @@ activation_token = TokenGenerator()
 
 
 def activate(request, uidb64, token):
-
     # Decode the token
-    uid = urlsafe_base64_decode(uidb64).decode()
-    user = User.objects.get(pk=uid)
+    uid = urlsafe_base64_decode(uidb64)
     try:
-        uid = urlsafe_base64_decode(uidb64).decode()
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
-    # Check if user is found and decoding is done
-    if user and activation_token.check_token(user, token):
+
+    if user and default_token_generator.check_token(user, token):
         # Activate the user
         user.is_active = True
         user.save()
-        # TODO: Activation is done
+        # TODO: Activation is done, you can redirect to a success page
         return redirect("home")
 
-    # TODO: Activation link is invalid
-    else:
-        return redirect("login")
-
+    # TODO: Activation link is invalid, you can redirect to an error page
+    return redirect("login")
 
 # Helpers
 
