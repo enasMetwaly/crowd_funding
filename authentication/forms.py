@@ -40,7 +40,7 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()  # Use the custom user model
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['first_name', 'last_name', 'email','phone']
 
     # def clean_email(self):
     #     email = self.cleaned_data.get('email')

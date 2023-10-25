@@ -68,6 +68,7 @@ class SettingsView(LoginRequiredMixin, TemplateView):
             'can_disconnect': can_disconnect
         })
 
+
 @login_required
 def password(request):
     if request.user.has_usable_password():
@@ -99,21 +100,59 @@ def home(request):
 
 
 
+# def register(request):
+#     form = RegisterForm(request.POST or None)
+#     if request.method == 'POST':
+#         user_profile = UserProfile.objects.get(user=request.user)
+#
+#         # Handle file upload
+#         uploaded_image = request.FILES['avatar']
+#         if uploaded_image:
+#             user_profile.avatar.save(
+#                 uploaded_image.name,
+#                 ContentFile(uploaded_image.read())
+#             )
+#             user_profile.save()
+#
+#     if form.is_valid():
+#         user = form.save()
+#         UserProfile.objects.create(user_id=user.id, avatar=user.avatar)
+#         #send activation mail
+#         send_activation_email(request, form.cleaned_data.get('email'), user)
+#
+#         return redirect("login")
+#     else:
+#         print(form.errors)  # Debug: Print form errors to the console
+#
+#     return render(request, "authentication/register.html", {"form": form})
+from django.core.files.base import ContentFile
+
 def register(request):
-    form = RegisterForm(request.POST or None)
+    if request.method == 'POST':
+        form = RegisterForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()
 
-    if form.is_valid():
-        user = form.save()
-        UserProfile.objects.create(user_id=user.id, avatar=user.avatar)
-        #send activation mail
-        send_activation_email(request, form.cleaned_data.get('email'), user)
+            # Handle file upload
+            uploaded_image = request.FILES.get('profile_image')
+            if uploaded_image:
+                user_profile, created = UserProfile.objects.get_or_create(user=user)
+                user_profile.avatar.save(
+                    uploaded_image.name,
+                    ContentFile(uploaded_image.read())
+                )
+                user_profile.save()
 
-        return redirect("login")
+                # Send activation email and redirect to login or another page
+                send_activation_email(request, form.cleaned_data.get('email'), user)
+
+            return redirect("login")
     else:
-        print(form.errors)  # Debug: Print form errors to the console
+        form = RegisterForm()
 
     return render(request, "authentication/register.html", {"form": form})
 
+#
 
 def login(request):
     form = LoginForm(data=request.POST or None)
