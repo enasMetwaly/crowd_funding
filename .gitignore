@@ -1,0 +1,23 @@
+# Byte-compiled Python files
+*.pyc
+__pycache__/
+migrations/
+# Database
+db.sqlite3
+
+# Static files
+staticfiles/
+
+# Media files
+media/
+
+# Virtual environment
+myenv/
+
+# IDE-specific directories
+.vscode/
+.idea/
+
+# Environment configuration
+.env
+
