@@ -66,10 +66,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=20, verbose_name='first name')
     last_name = models.CharField(
         max_length=20, default='', verbose_name='last name')
+
     phone = models.CharField(max_length=15, validators=[
         PHONE_REGEX], verbose_name='phone')
     avatar = models.ImageField(
-        upload_to="profile_images", verbose_name='profile picture', default='profile_images/default-pic.jpeg')
+        upload_to="profile_images", verbose_name='profile picture')
     country = models.CharField(
         max_length=20, blank=True, default='', verbose_name='country')
     birthdate = models.DateField(
@@ -109,8 +110,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(
-        upload_to="profile_images", verbose_name='profile picture', default='profile_images/default-pic.jpeg')
+
+
+    avatar = models.ImageField(upload_to="profile_images", verbose_name='profile picture'                       )
 
     def get_absolute_url(self):
         return reverse('user_profile')

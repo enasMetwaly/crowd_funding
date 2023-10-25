@@ -15,11 +15,13 @@ from django.contrib import messages
 # @login_required
 def profile(request):
     user=request.user
+    user_profile = UserProfile.objects.get(user=user)
+
     print(user)
     user_projects = Project.objects.filter(creator_id=request.user.id)
     # return render(request, 'user/profile/base.html')
 
-    return render(request, 'user/profile/base.html', {'projects': user_projects, 'donations': False,'user':user})
+    return render(request, 'user/profile/base.html', {'projects': user_projects, 'donations': False,'user':user,'user_profile':user_profile})
 
 @login_required
 # def donations(request):
