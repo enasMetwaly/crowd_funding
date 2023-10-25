@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'user',
     'social_django',
     'crispy_forms',
+    'homepage',
+    'mainproject',
+
 
 ]
 
@@ -89,9 +92,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'localhost',
-        'NAME': 'iti',
+        'NAME': 'crowd_funding',
         'USER': 'postgres',
-        'PASSWORD': '0123456',
+        'PASSWORD': '111',
         'PORT': 5432
     }
 }
