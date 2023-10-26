@@ -2,7 +2,11 @@
 {% block title%} Details Project {% endblock %}
 
 {% block project  %}
+
+
 <div class="container mx-auto col-6 p-5 m-5">
+  
+{% include "mainproject/donate.html" %}
   <!-- <table border="1 solid red  ">
 <tr>
   <th>Title</th>
@@ -58,14 +62,15 @@
           <small class="text-muted">Total target: ${{ project.total_target }}</small>
         </p>
         
-        <p class="card-text">Start time: {{ currentProduct.created_at }}</p>
+        <p class="card-text">Start time: {{ project.start_time }}</p>
         <p class="card-text">End time: {{ project.end_time }}</p>
         <p class="card-text">Author: {{ project.creator }}</p>
         <a href="{% url 'listproject'  %}" class="btn btn-primary mt-3 btn-lg">Back </a>
       </div>
     </div>
+
   </div>
-</div>
+  
 <style>
   .project-image {
       width: 300px;  /* Adjust the maximum width as needed */

@@ -43,14 +43,20 @@
     <div class="card bg-light">
       <div class="d-flex g-0">
         <div class="w-100">
-          {% for img in project.image_set.all %}
-          <img
-            src="{{ img.images.url }}"
+          {% if project.image_set.all %}
+    <img src="{{ project.image_set.all.0.images.url }}"
+         class="rounded w-100 project-image"
+         alt="{{ project.name }}"
+    />
+{% endif %}
+
+          <!-- {% for img in project.image_set.all %}
+          <img src="{{ img.images.url }}"
             class="rounded w-100  project-image"
            
             alt="{{ currentProduct.name }}"
           />
-          {% endfor %}
+          {% endfor %} -->
         </div>
   
         <div class="col-6">
@@ -61,7 +67,7 @@
             <small class="text-muted">Total target: ${{ project.total_target }}</small>
           </p>
           
-          <p class="">Start time: {{ currentProduct.created_at }}</p>
+          <p class="">Start time: {{ project.start_time }}</p>
           <p class="">End time: {{ project.end_time }}</p>
           <p class="">Author: {{ project.creator }}</p>
          

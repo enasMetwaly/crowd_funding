@@ -4,8 +4,15 @@ from django.conf import settings
 # from apps.authentication.models import Register
 from django.contrib.auth.models import User
 
+class Tag(models.Model): 
+    name=models.CharField(max_length=100)
+    
 class Catogrey(models.Model):
     name = models.CharField(max_length=250)
+
+
+
+
     
     def __str__(self):
         return self.name
@@ -20,14 +27,14 @@ class Project(models.Model):
     creator=models.ForeignKey(settings.AUTH_USER_MODEL , on_delete=models.CASCADE, blank=True, null=True)
     start_time=models.DateTimeField()
     end_time=models.DateTimeField()
-    tags=models.ManyToManyField('Tag')
+    tags=models.ManyToManyField(Tag,null=True, blank=True)
+    # tag = 
+
     # images=models.ManyToManyField('Pictures')
     catogrey=models.ForeignKey(Catogrey , on_delete=models.CASCADE, blank=True, null=True)
 
  
 
-class Tag(models.Model): 
-    name=models.CharField(max_length=100)
 
 
 class Image(models.Model):
@@ -46,7 +53,7 @@ class Comment(models.Model):
 
 
 class Donation(models.Model):
-    donation = models.FloatField()
+    donation = models.DecimalField(max_digits=10,decimal_places=2)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
