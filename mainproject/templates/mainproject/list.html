@@ -1,92 +1,145 @@
-{% extends 'index.html' %}
-{% block title%} Details Project {% endblock %}
+{% extends 'index.html' %} {% block title%} Details Project {% endblock %}
 
-{% block project  %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
 
-  <!-- <table border="1 solid red  ">
-    <tr>
-      <th>Title</th>
-      <th>Details</th>
-      <th>Total target</th>
-      <th>Start time</th>
-      <th>End time</th>
-      <th>Pics</th>
-      <th>Delete</th>
-      <th>show</th>
-       <th>Images</th> -->
-    <!-- </tr>
-    {% for project in projects %}
-    <tr>
-        <td>{{ project.title }}</td>
-        <td>{{ project.details }}</td>
-        <td>{{ project.total_target }}</td>
-        <td>{{ project.start_time }}</td>
-        <td>{{ project.end_time }}</td>
-        <td>
-            {% for img in project.image_set.all %}
-                <img src="{{ img.images.url }}" class="project-image" alt="">
-            {% endfor %}
-        </td>
-        <td><a href="{% url 'deleteproject' project.id %}">Delete</a></td>
-        <td><a href="{% url 'detailsproject' project.id %}">Show</a></td>
-    </tr>
-    {% endfor %}
-    </table>
-</div>  -->
-<div class="mx-auto col-6">
+
+
+
+
+
+
+
+
+
+{% block list %}
+<style>
+  /* Custom CSS for image sizing */
+  .portfolio-item img {
+    
+    width: 400px;
+    height: 400px;
+      object-fit: cover;
+    
+  }
+  .ssss{
+    
+      width: 400px;
+      height: 400px;
+      object-fit: cover;
+    
+  }
+</style>
+<div class=" col-6 justify-content-start ">
   <a href="{% url 'addproject'  %}" class="btn btn-warning ">ADD Project NOw</a>
 </div>
-<div class="container row mx-auto  align-content-center p-5 m-5">
- 
-  {% for project in projects %}
-  <div class="col-6 mt-3">
-    <div class="card bg-light">
-      <div class="d-flex g-0">
-        <div class="w-100">
-          {% if project.image_set.all %}
-    <img src="{{ project.image_set.all.0.images.url }}"
-         class="rounded w-100 project-image"
-         alt="{{ project.name }}"
-    />
-{% endif %}
+<div class=" row mx-auto  align-content-center p-5 m-5">
 
-          <!-- {% for img in project.image_set.all %}
-          <img src="{{ img.images.url }}"
-            class="rounded w-100  project-image"
-           
-            alt="{{ currentProduct.name }}"
-          />
-          {% endfor %} -->
+
+  {% for project in projects %}
+    <div class="col-lg-4 col-sm-6 mb-4 ">
+      <div class="portfolio-item">
+        <a
+          class="portfolio-link"
+          data-bs-toggle="modal"
+          href="#portfolioModal{{ project.id }}"
+        >
+          <div class="portfolio-hover">
+            <div class="portfolio-hover-content">
+              <i class="fas fa-plus fa-3x"></i>
+            </div>
+          </div>
+          {% if project.image_set.all %}
+            <img
+              class="img-fixed-width"
+              src="{{ project.image_set.all.0.images.url }}"
+              alt="{{ project.title }}"
+            />
+          {% else %}
+            <!-- Replace with a default image or message if no image available -->
+            <img
+              class="img-fixed-width"
+              src="{ project.image_set.all.0.images.url }"
+              alt="No Image Available"
+            />
+          {% endif %}
+        </a>
+        <div class="portfolio-caption">
+          <div class="portfolio-caption-heading">{{ project.title }}</div>
+          <div class="portfolio-caption-subheading text-muted">
+            {{ project.details }}
+          </div>
         </div>
-  
-        <div class="col-6">
-          <h5 class=" fs-2">{{ project.title }}</h5>
-          <p class="">{{ project.details }}</p>
-          
-          <p class="">
-            <small class="text-muted">Total target: ${{ project.total_target }}</small>
-          </p>
-          
-          <p class="">Start time: {{ project.start_time }}</p>
-          <p class="">End time: {{ project.end_time }}</p>
-          <p class="">Author: {{ project.creator }}</p>
-         
-          <a href="{% url 'deleteproject' project.id %}"  class="btn btn-primary mt-3 btn-lg">Delete</a>
-          <a href="{% url 'detailsproject' project.id %}" class="btn btn-primary mt-3 btn-lg">Show</a>
+      </div>
+      <div
+        class="portfolio-modal modal fade"
+        id="portfolioModal{{ project.id }}"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="close-modal" data-bs-dismiss="modal">
+              <i class="fas fa-times"></i>
+            </div>
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-8">
+                  <div class="modal-body">
+                    <!-- Project details-->
+                    <h2 class="text-uppercase">Project Name: {{ project.title }}</h2>
+                    <p class="item-intro text-muted">DESCRIPTION:{{ project.details }}</p>
+                    
+                    <!-- Image slider using Bootstrap Carousel -->
+                    <div id="projectImageSlider{{ project.id }}" class="carousel slide" data-bs-ride="carousel">
+                      <div class="carousel-inner">
+                        {% for image in project.image_set.all %}
+                          <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                            <img src="{{ image.images.url }}" class="d-block  ssss" alt="{{ project.title }}">
+                          </div>
+                        {% endfor %}
+                      </div>
+                      <a class="carousel-control-prev" href="#projectImageSlider{{ project.id }}" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                      </a>
+                      <a class="carousel-control-next" href="#projectImageSlider{{ project.id }}" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                      </a>
+                    </div>
+                    
+                    <!-- Additional project details can be displayed here -->
+                    <button
+                      class="btn btn-primary btn-xl text-uppercase"
+                      data-bs-dismiss="modal"
+                      type="button"
+                    >
+                      <i class="fas fa-times me-1"></i>
+                      Close Project
+                    </button>
+                    <a href="{% url 'detailsproject' project.id %}">Details</a>
+                    <a href="{% url 'deleteproject' project.id %}"  class="btn btn-primary mt-3 btn-lg">Delete</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   {% endfor %}
 </div>
-<style>
-  .project-image {
-      width: 500px;  /* Adjust the maximum width as needed */
-      height: 500px;      /* Maintain aspect ratio */
-  }
-</style>
-{% endblock %}               
-
-
-
-
+<!-- 
+<script>
+  // Automatically switch slides every one second
+  $(document).ready(function() {
+    {% for project in projects %}
+    $('#projectImageSlider{{ project.id }}').carousel({
+      interval: 1000, // Change the interval to 1000 milliseconds (1 second)
+    });
+    {% endfor %}
+  });
+</script> -->
+{% endblock %}

@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-
+        
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{%static 'assets/favicon.ico'%}" />
         <!-- Font Awesome icons (free version)-->
@@ -17,7 +17,8 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{%static 'css/styles.css'%}" rel="stylesheet " />
-        
+        {% block stylesheets %}
+        {% endblock  %}
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -36,10 +37,18 @@
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{%url 'addproject' %}">add</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{%url 'listproject' %}">list</a>
+                  </li>
                  
                  
                   <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <a class="nav-link disabled" href="{%url 'listproject' %}" tabindex="-1" aria-disabled="true">list</a>
+                  <li class="nav-item">
+                    <a class="nav-link disabled" href="{%url 'addproject' %}" tabindex="-1" aria-disabled="true"></a>                  </li>
                   </li>
                 </ul>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
@@ -48,7 +57,6 @@
                             <a class="nav-link" href="{%url 'logout' %}">Logout</a>
                           </li>
                    
-                      
                        
               <li class="nav-item">
                 <a class="nav-link" href="{%url 'login' %}">Login</a>
@@ -115,7 +123,7 @@
                                         </div>
                                     </div>
     
-                                <!-- Add more carousel items here as needed -->
+                                 Add more carousel items here as needed 
                             <!-- </div>
                             <a class="carousel-control-prev" href="#serviceCarousel" role="button" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -139,23 +147,14 @@
                     <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4 col-sm-6 mb-4">
-                        <!-- Portfolio item 1-->
-                        <div class="portfolio-item">
-                            <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal1">
-                                <div class="portfolio-hover">
-                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
-                                </div>
-                                <img class="img-fluid" src="{% static 'assets/img/portfolio/1.jpg'%}" alt="..." />
-                            </a>
-                            <div class="portfolio-caption">
-                                <div class="portfolio-caption-heading">Threads</div>
-                                <div class="portfolio-caption-subheading text-muted">Illustration</div>
-                            </div>
-                        </div>
+                    {% block list %}
+
+                   
+                        {% endblock %}
+
                     </div>
-                    <div class="col-lg-4 col-sm-6 mb-4">
-                        <!-- Portfolio item 2-->
+                 <div class="col-lg-4 col-sm-6 mb-4">
+                         Portfolio item 2
                         <div class="portfolio-item">
                             <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal2">
                                 <div class="portfolio-hover">
@@ -171,7 +170,7 @@
                     </div>
                     <div class="col-lg-4 col-sm-6 mb-4">
                         <!-- Portfolio item 3-->
-                        <div class="portfolio-item">
+                        <!-- <div class="portfolio-item">
                             <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal3">
                                 <div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -184,9 +183,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
+                    <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0"> -->
                         <!-- Portfolio item 4-->
-                        <div class="portfolio-item">
+                        <!-- <div class="portfolio-item">
                             <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal4">
                                 <div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -199,9 +198,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6 mb-4 mb-sm-0">
+                    <div class="col-lg-4 col-sm-6 mb-4 mb-sm-0"> -->
                         <!-- Portfolio item 5-->
-                        <div class="portfolio-item">
+                        <!-- <div class="portfolio-item">
                             <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal5">
                                 <div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -214,9 +213,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6">
+                    <div class="col-lg-4 col-sm-6"> -->
                         <!-- Portfolio item 6-->
-                        <div class="portfolio-item">
+                        <!-- <div class="portfolio-item">
                             <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal6">
                                 <div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
@@ -228,7 +227,7 @@
                                 <div class="portfolio-caption-subheading text-muted">Photography</div>
                             </div>
                         </div>
-                    </div>
+                    </div> --> -->
                 </div>
             </div>
         </section>

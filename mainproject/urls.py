@@ -15,5 +15,6 @@ urlpatterns = [
     path('details/<int:id>',details_project, name ='detailsproject' ),
     path('details/<int:id>/donate',donate, name ='donate' ),
     path('aa',my_view, name ='my_view' ),
+     path('<int:id>/rate', rate, name='project_rate'),
 
 ]
