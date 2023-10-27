@@ -86,6 +86,10 @@ def donate(request, id):
 def details_project(request, id):
     project = get_object_or_404(Project, id=id)
     user=getUser(request)
+    comments = project.comment_set.all()
+    new_report_form = Report_form()
+    reply = Reply_form()
+    replies = Reply.objects.all()
     donate = project.donation_set.all().aggregate(Sum("donation"))
     donations_count = len(project.donation_set.all())
     donation_average = (donate["donation__sum"] if donate["donation__sum"] else 0)*100/project.total_target
@@ -114,10 +118,23 @@ def details_project(request, id):
     if average_rating is None:
         average_rating = 0
     context={
-        'project': project,'donation': donate["donation__sum"] if donate["donation__sum"] else 0,
-        'donations': donations_count, 'check_target': project.total_target*.25, 'check_target': project.total_target*.25,
-        'days': days_diff,'rating': average_rating*20,'user_rating': user_rating,'rating_range': range(5, 0, -1),
-        'average_rating': average_rating,'donation_average': donation_average,'user': user,'rating': average_rating*20,
+          'user': user,
+          'days': days_diff,
+          'project': project,
+          'replies': replies,
+          'reply_form': reply,
+          'comments': comments,
+          'user_rating': user_rating,
+          'rating': average_rating*20,
+          'rating': average_rating*20,
+          'donations': donations_count,
+          'report_form': new_report_form,
+          'rating_range': range(5, 0, -1),
+          'average_rating': average_rating,
+          'donation_average': donation_average,
+          'check_target': project.total_target*.25,
+          'check_target': project.total_target*.25,
+          'donation': donate["donation__sum"] if donate["donation__sum"] else 0,
              }
     return render(request, 'mainproject/details.html', context)
 
@@ -193,3 +210,60 @@ def apply_rating(project, user, rating):
     else:
         Rate.objects.create(
             rate=rating, projcet_id=project.id, user_id=user)
+        
+
+def create_comment(request, project_id):
+        
+    user = getUser(request)
+    if request.method == "POST":
+        if request.POST['comment']:
+            comment = Comment.objects.create(
+                comment=request.POST['comment'],
+                project_id=project_id,
+                user_id=user.id
+            )
+            return redirect('detailsproject', project_id)
+    return render(request, "mainproject/details.html", project_id , context={"user":user})
+
+def create_comment_reply(request, comment_id):
+        
+        user = getUser(request)
+        if request.method == "POST":
+            if request.POST['reply']:
+                project = Project.objects.all().filter(comment__id=comment_id)[0]
+
+                reply = Reply.objects.create(
+                    reply=request.POST['reply'],
+                    comment_id=comment_id,
+                    user_id=user.id
+                )
+                return redirect('detailsproject', project.id)
+        return render(request, "home/project-details.html", project.id)
+
+
+def add_report(request, project_id):
+    user = getUser(request)
+    my_project = Project.objects.get(id=project_id)
+    if request.method == "POST":
+        Project_Report.objects.create(
+            report='ip',
+            project=my_project,
+            user_id=user.id
+        )
+        return redirect('detailsproject', project_id)
+
+
+def add_comment_report(request, comment_id):
+    user = getUser(request)
+    my_comment = Comment.objects.get(id=comment_id)
+    project = Project.objects.all().filter(comment__id=comment_id)[0]
+
+    if request.method == "POST":
+        Comment_Report.objects.create(
+            report='ip',
+            comment=my_comment,
+            user_id=user.id
+        )
+        return redirect('detailsproject', project.id)
+
+

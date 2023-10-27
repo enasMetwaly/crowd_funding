@@ -58,9 +58,10 @@
                 <span class="text-sm text-dark"> to: </span>{{project.end_time}}</p>
 
               <hr class="my-4" />
-
-              <h5 class="mt-5">Comments (3) :</h5>
+              <!-- Comments -->
+              <h5 class="mt-5">Comments ({{ comments|length }}) :</h5>
               <ul class="list-unstyled mt-4">
+                {%for comment in comments%}
                 <li class="">
                   <div class="comment d-flex">
                     <div class="col-md-1">
@@ -68,10 +69,12 @@
                     </div>
                     <div class="col-md-8 mx-3">
                       <h6 class="comment-header mb-0 d-flex">
-                        Sample User 1
+                        {{ comment.user|title }}
                         <div class="">
+
                           <!-- Report Comment -->
-                          <form action="#" method="POST" class="mx-3">
+                          <form action="{% url 'create_comment_report' comment.id %}" method="POST" class="mx-3">
+                            {%csrf_token%}
                             <button type="submit" class="btn btn-transparent shadow-none text-center mt-2 p-0"><i
                                 class="fa-solid fa-flag"></i>
                               Report
@@ -80,31 +83,33 @@
                         </div>
                       </h6>
                       <p class="comment-time">
-                        <small><small>October 18, 2023</small></small>
+                        <small><small>{{ comment.created_at }}</small></small>
                       </p>
                       <p class="comment-content">
-                        This is a sample comment from Sample User 1. It provides feedback or asks a question about the project.
+                        {{comment.comment}}
                       </p>
                       <p>
                         <a class="text-decoration-underline text-secondary" data-toggle="collapse"
-                          href="#collapseExample1add_replies" role="button" aria-expanded="false"
+                          href="#collapseExample1add_replies{{ forloop.counter }}add_replies" role="button" aria-expanded="false"
                           aria-controls="collapseExample"><small>reply</small></a>
 
                         <a class="text-decoration-underline text-secondary" data-toggle="collapse"
-                          href="#collapseExample1show_replies" role="button" aria-expanded="false"
+                          href="#collapseExample1show_replies{{ forloop.counter }}show_replies" role="button" aria-expanded="false"
                           aria-controls="collapseExample"><small>show replies</small></a>
                       </p>
-                      <div class="collapse" id="collapseExample1add_replies">
-                        <form class="d-flex flex-column align-items-end" method="post" action="#">
-                          <textarea id="" name="reply1" rows="2" class="col-md-12 form-control"></textarea>
-                          <button type="submit" class="btn bg-gradient-light w-20 mt-2">
-                            reply
-                          </button>
+                      <div class="collapse" id="collapseExample1add_replies{{ forloop.counter }}add_replies">
+                        <form action="{% url 'create_comment_reply' comment.id %}" method="POST" class="mx-3">
+                            {% csrf_token %}
+                            <textarea id="replyTextArea{{ forloop.counter }}" name="reply" rows="2" class="col-md-12 form-control"></textarea>
+                            <button type="submit" class="btn bg-gradient-light w-20 mt-2">Reply</button>
                         </form>
-                      </div>
-                      <div class="collapse" id="collapseExample1show_replies">
+                    </div>
+                    
+                      <div class="collapse" id="collapseExample1show_replies{{ forloop.counter }}show_replies">
                         <hr class="my-0" />
                         <ul class="list-unstyled mt-1">
+                          {%for reply in replies%}
+                          {%if reply.comment_id == comment.id %}
                           <li class=" mt-1">
                             <div class="comment d-flex">
                               <div class="col-md-1">
@@ -112,91 +117,37 @@
                               </div>
                               <div class="col-md-8 mx-3">
                                 <h6 class="comment-header mb-0">
-                                  Sample User 2
+                                  {{ reply.user|title }}
                                 </h6>
                                 <p class="comment-time">
-                                  <small><small>October 19, 2023</small></small>
+                                  <small><small>{{ reply.created_at }}</small></small>
                                 </p>
                                 <p class="comment-content">
-                                  This is a sample reply from Sample User 2 to Sample User 1's comment. It provides additional information.
+                                  {{reply.reply}}  
                                 </p>
                               </div>
                             </div>
                           </li>
+                          {%else%}
+                          {%endif%}
+                          {%endfor%}
                         </ul>
                       </div>
                     </div>
                   </div>
                   <hr />
                 </li>
-                <li class="">
-                  <div class="comment d-flex">
-                    <div class="col-md-1">
-                      <img class="rounded-circle img-thumbnail" src="sample-user3.jpg" style="width: 60px;height:60px;"/>
-                    </div>
-                    <div class="col-md-8 mx-3">
-                      <h6 class="comment-header mb-0 d-flex">
-                        Sample User 3
-                        <div class="">
-                          <!-- Report Comment -->
-                          <form action="#" method="POST" class="mx-3">
-                            <button type="submit" class="btn btn-transparent shadow-none text-center mt-2 p-0"><i
-                                class="fa-solid fa-flag"></i>
-                              Report
-                            </button>
-                          </form>
-                        </div>
-                      </h6>
-                      <p class="comment-time">
-                        <small><small>October 20, 2023</small></small>
-                      </p>
-                      <p class="comment-content">
-                        This is a sample comment from Sample User 3. It provides feedback or asks a question about the project.
-                      </p>
-                      <p>
-                        <a class="text-decoration-underline text-secondary" data-toggle="collapse"
-                          href="#collapseExample2add_replies" role="button" aria-expanded="false"
-                          aria-controls="collapseExample"><small>reply</small></a>
+                {%endfor%}
+                <hr />
 
-                        <a class="text-decoration-underline text-secondary" data-toggle="collapse"
-                          href="#collapseExample2show_replies" role="button" aria-expanded="false"
-                          aria-controls="collapseExample"><small>show replies</small></a>
-                      </p>
-                      <div class="collapse" id="collapseExample2add_replies">
-                        <form class="d-flex flex-column align-items-end" method="post" action="#">
-                          <textarea id="" name="reply2" rows="2" class="col-md-12 form-control"></textarea>
-                          <button type="submit" class="btn bg-gradient-light w-20 mt-2">
-                            reply
-                          </button>
-                        </form>
-                      </div>
-                      <div class="collapse" id="collapseExample2show_replies">
-                        <hr class="my-0" />
-                        <ul class="list-unstyled mt-1">
-                          <li class=" mt-1">
-                            <div class="comment d-flex">
-                              <div class="col-md-1">
-                                <img class="rounded-circle img-thumbnail" src="sample-user1.jpg"  style="width: 40px;height:40px;" />
-                              </div>
-                              <div class="col-md-8 mx-3">
-                                <h6 class="comment-header mb-0">
-                                  Sample User 1
-                                </h6>
-                                <p class="comment-time">
-                                  <small><small>October 21, 2023</small></small>
-                                </p>
-                                <p class="comment-content">
-                                  This is a sample reply from Sample User 1 to Sample User 3's comment. It provides additional information.
-                                </p>
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <hr />
-                </li>
+                <form class="d-flex flex-column align-items-end" method="post"
+                  action="{% url 'create_comment' project.id %}">
+                  {% csrf_token %}
+                  <textarea id="" name="comment" rows="2" class="col-md-12 form-control"></textarea>
+                  <button type="submit" class="btn bg-gradient-light w-20 mt-2">
+                    Comment
+                  </button>
+                </form>
               </ul>
 
             </div>

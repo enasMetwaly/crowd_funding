@@ -1,8 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.conf import settings
-# from apps.authentication.models import Register
-from django.contrib.auth.models import User
 
 class Tag(models.Model): 
     name=models.CharField(max_length=100)
@@ -27,9 +24,6 @@ class Project(models.Model):
     start_time=models.DateTimeField()
     end_time=models.DateTimeField()
     tags=models.ManyToManyField(Tag,null=True, blank=True)
-    # tag = 
-
-    # images=models.ManyToManyField('Pictures')
     catogrey=models.ForeignKey(Catogrey , on_delete=models.CASCADE, blank=True, null=True)
 
  
