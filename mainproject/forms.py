@@ -96,7 +96,7 @@ class PicturesForm(forms.ModelForm):
 
 
 class Report_form(forms.ModelForm):
-    
+
     class Meta:
         model=Project_Report
         fields=['report']
