@@ -208,13 +208,11 @@ def rate(request, id):
 
 def apply_rating(project, user, rating):
 
-    # If User rated the same project before --> change rate value
     prev_user_rating = project.rate_set.filter(user_id=user)
     if prev_user_rating:
         prev_user_rating[0].rate = int(rating)
         prev_user_rating[0].save()
 
-    # first time to rate this project
     else:
         Rate.objects.create(
             rate=rating, projcet_id=project.id, user_id=user)

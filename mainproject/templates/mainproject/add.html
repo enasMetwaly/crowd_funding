@@ -1,24 +1,12 @@
 {% extends 'index.html' %}
 {% block title%} Add Project {% endblock %}
 
-
-
-  {% block project  %}
-  <!-- <div class="container col-6 m-auto"></div>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ project_form.as_p }}
-    {{ pictures_form.as_p }}
-   
-    <button type="submit">Add Project</button>
-  </form>
-</div> -->
-
+{% block project  %}
 <div class="container">
   <div class="py-5 mx-auto">
-    <div class="col-md-8 card d-flex shadow-lg p-4 mt-5 mx-auto">
+    <div class="col-md-8 card d-flex shadow p-4 mt-5 mx-auto">
       <div class="text-center">
-        <h3 class="text-gradient text-primary">Create New Project</h3>
+        <h3 class="text-custom">Create a New Project</h3>
       </div>
       <div class="card card-plain">
         <form role="form" id="contact-form" method="post" autocomplete="off" enctype="multipart/form-data">
@@ -50,43 +38,33 @@
 
           <div class="mb-3">
             <label class="form-label">End Date & Time</label>
-
             {{ project_form.end_time }}
           </div>
           <span class="text-error">{{ project_form.end_time.errors }}</span>
 
           <div class="mb-3">
             <label class="form-label">Category</label>
-
             {{ project_form.category }}
           </div>
           <span class="text-error">{{ project_form.category.errors }}</span>
 
-
-          
           <div class="mb-3">
-            <label class="form-label">Add tag</label>
+            <label class="form-label">Add Tag</label>
             <select name="tags" multiple class="form-control">
-                {% for tag in project_form.tags.field.queryset %}
-                    <option value="{{ tag.id }}">{{ tag.name }}</option>
-                {% endfor %}
+              {% for tag in project_form.tags.field.queryset %}
+                <option value="{{ tag.id }}">{{ tag.name }}</option>
+              {% endfor %}
             </select>
-            <input type="text" class="inp form-control my-1" maxlength="8" name="newTag" id="id_tag"/>
-            <span class="show_tag" style="padding: 2px;background-color: rgba(145, 9, 120, 0.61);border-radius: 15%; color: rgb(241, 240, 255);"></span>
-            <p style="margin: 2px; color: black; font-size: small; font-weight: 550;">or choose one:</p>
-        </div>
-        
-        
+          </div>
 
           <div class="mb-3">
             <label class="form-label">Photos</label><br />
             <input class="form-control" type="file" name="images" multiple required>
-
           </div>
 
           <div class="text-center">
-            <button type="submit" name="create_project" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">
-              Create
+            <button type="submit" name="create_project" class="btn btn-primary btn-lg w-100 mt-4">
+              Create Project
             </button>
           </div>
         </form>
@@ -94,22 +72,4 @@
     </div>
   </div>
 </div>
-<script>
-
-
-// let btnAdd = document.querySelector('button');
-let input = document.querySelector('.inp');
-let show = document.querySelector('.show_tag');
-
-input.addEventListener('keyup', () =>{
-    show.innerText = input.value.replace(/\s+/g,'_').trim()
-
-    
-  
-});
-</script>
-
 {% endblock %}
-
-
-

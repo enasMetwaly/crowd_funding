@@ -16,10 +16,8 @@ urlpatterns = [
     path('details/<int:id>/donate',donate, name ='donate' ),
     path('<int:id>/rate', rate, name='project_rate'),
     path('<int:id>/comment', create_comment, name='create_comment'),
-
     path('<int:id>/report', add_report, name='create_report'),
     path('<int:id>/report_comment', add_comment_report, name='create_comment_report'),
     path('<int:id>/reply', create_comment_reply, name='create_comment_reply'),
-
     path('projects/tag/<int:tag_id>', get_tag_projects, name='get_tag'),
 ]
