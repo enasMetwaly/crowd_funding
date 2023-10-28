@@ -107,7 +107,7 @@ def donate(request, id):
             user=user  # Assign the user object directly
         )
 
-        return render(request, "mainproject/details2.html", {'project_id': id})
+        return redirect('detailsproject', id)
     return render(request, "mainproject/donate.html", {'id': id, 'user': user})
 
 

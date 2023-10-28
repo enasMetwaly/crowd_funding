@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-<form role="form" id="contact-form" method="post" autocomplete="off" action="{% url 'detailsproject' id %}">
+            <form role="form" id="contact-form" method="post" autocomplete="off" action="{% url 'donate' project.id %}">
 
 
                 {% csrf_token %}

@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
 <link rel="stylesheet" href="/../../../static/css/project-details.css">
-<link rel="stylesheet" href="{% static 'css/project-details.css' %}">
+<!--<link rel="stylesheet" href="{% static 'css/project-details.css' %}">-->
 <link rel="stylesheet" href="/../../../static/css/rate.css">
 <link rel="stylesheet" href="/../../../static/css/projects-page.css">
 
@@ -17,7 +17,7 @@
 {% block project %}
 
 <!-- Donate Modal -->
-<a href="{% url 'donate' project.id %}">Donate</a>
+{% include "mainproject/donate.html" %}
 
 <!-- Delete Modal -->
 {% include "mainproject/delete_modal.html" %}
@@ -54,6 +54,42 @@
 <!--                </a>-->
 <!--              </div>-->
 
+<div id="imageCarousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="images_before">
+                <h2>Images Before</h2>
+                <div class="image-container">
+                    {% for image in images_before %}
+                        {% if image %}
+                            <img src="{{ image.url }}" alt="Image Before" class="img-fluid" style="max-width: 50%;"><!-- Adjust the max-width as needed -->
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="images_after">
+                <h2>Images After</h2>
+                <div class="image-container">
+                    {% for image in images_after %}
+                        {% if image %}
+                            <img src="{{ image.url }}" alt="Image After" class="img-fluid" style="max-width: 50%;"><!-- Adjust the max-width as needed -->
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
 
               <h5 class="mt-5">What The Funds Are For:</h5>
               <p>
