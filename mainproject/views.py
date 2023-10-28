@@ -16,6 +16,8 @@ from django.http import HttpResponse
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.template import loader
+import re
 NULL = {}
 
 
@@ -31,10 +33,6 @@ def getUser(request):
     return None
 
 
-@login_required
-def my_view(request):
-    user = request.user
-    return HttpResponse(f"Hello, {user}!")
 
 
 def add_project(request):
@@ -45,14 +43,6 @@ def add_project(request):
             project = project_form.save(commit=False)
             project.creator = request.user  # Assign the current user as the creator
             project.save()
-            new_tag_name = request.POST.get('newTag')
-            if new_tag_name:
-                new_tag, created = Tag.objects.get_or_create(name=new_tag_name)
-                project.tags.add(new_tag)
-
-            selected_tags = request.POST.getlist('tags')
-            existing_tags = Tag.objects.filter(id__in=selected_tags)
-            project.tags.add(*existing_tags)
             for image_file in request.FILES.getlist('images'):
                 image = Image(images=image_file, project=project)
                 image.save()
@@ -62,7 +52,6 @@ def add_project(request):
         project_form = ProjectForm()
         pictures_form = PicturesForm(instance=Project())
     return render(request, 'mainproject/add.html', {'project_form': project_form, 'pictures_form': pictures_form})
-    
 
 
 def donate(request, id):
@@ -107,11 +96,13 @@ def details_project(request, id):
         counter.append("1")
     counter.pop()
     myFormat = "%Y-%m-%d %H:%M:%S"
+
     today = datetime.strptime(datetime.now().strftime(myFormat), myFormat)
     end_date = datetime.strptime(project.end_time.strftime(myFormat), myFormat)
     days_diff = (end_date-today).days
     donation_average = (donate["donation__sum"] if donate["donation__sum"] else 0)*100/project.total_target
     average_rating = project.rate_set.all().aggregate(Avg('rate'))['rate__avg']
+
     # return user rating if found
     user_rating = 0
     current_project_tags = project.tags.all()
@@ -120,7 +111,7 @@ def details_project(request, id):
     related_projects = related_projects[:4]
     
     if 'user_id' in request.session:
-        # prev_rating = Project.rate_set.get(user_id=user.id)
+        prev_rating = Project.rate_set.get(user_id=user.id)
         prev_rating=[]
 
         if prev_rating:
@@ -128,23 +119,27 @@ def details_project(request, id):
 
     if average_rating is None:
         average_rating = 0
+
     context={
+          'current_project_tags': current_project_tags,
           'user': user,
           'days': days_diff,
           'project': project,
           'replies': replies,
           'reply_form': reply,
           'comments': comments,
+          
           'user_rating': user_rating,
-          'rating': average_rating*20,
           'rating': average_rating*20,
           'donations': donations_count,
           'report_form': new_report_form,
           'rating_range': range(5, 0, -1),
+          
           'average_rating': average_rating,
           'donation_average': donation_average,
+          'related_projects': related_projects,
           'check_target': project.total_target*.25,
-          'check_target': project.total_target*.25,
+          
           'donation': donate["donation__sum"] if donate["donation__sum"] else 0,
           'current_project_tags':current_project_tags,
           'related_projects':related_projects,
@@ -254,16 +249,16 @@ def create_comment_reply(request, comment_id):
         return render(request, "home/project-details.html", project.id)
 
 
-def add_report(request, project_id):
+def add_report(request, id):
     user = getUser(request)
-    my_project = Project.objects.get(id=project_id)
+    my_project = Project.objects.get(id=id)
     if request.method == "POST":
         Project_Report.objects.create(
             report='ip',
             project=my_project,
             user_id=user.id
         )
-        return redirect('detailsproject', project_id)
+        return redirect('detailsproject', id)
 
 
 def add_comment_report(request, comment_id):
@@ -280,3 +275,36 @@ def add_comment_report(request, comment_id):
         return redirect('detailsproject', project.id)
 
 
+def get_tag_projects(request, tag_id):
+    if 'user_id' not in request.session:
+        user = NULL
+    else:
+        user = getUser(request)
+    context = {}
+    try:
+        tag = Tag.objects.get(id=tag_id)
+        projects = tag.project_set.all()
+
+        donations = []
+        progress_values = []
+        images = []
+        for project in projects:
+            donate = project.donation_set.all().aggregate(Sum("donation"))
+            total_donation = donate["donation__sum"] if donate["donation__sum"] else 0
+            
+            progress_values.append(total_donation * 100/project.total_target)
+            donations.append(total_donation)
+            images.append(project.image_set.all().first().images.url)
+
+        context = {
+            'title': tag,
+            'projects': projects,
+            'images': images,
+            'donations': donations,
+            'progress_values': progress_values,
+            'user':user
+        }
+        return render(request, "home/tag-projects.html", context)
+    except Project.DoesNotExist:
+        html_template = loader.get_template('home/page-404.html')
+        return HttpResponse(html_template.render(context, request))

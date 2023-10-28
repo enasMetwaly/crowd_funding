@@ -2,9 +2,11 @@ from django.db import models
 from django.conf import settings
 
 class Tag(models.Model): 
-    name=models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    
     def __str__(self):
         return self.name
+    
 class Catogrey(models.Model):
     name = models.CharField(max_length=250)
     def __str__(self):
@@ -22,7 +24,8 @@ class Project(models.Model):
     tags=models.ManyToManyField(Tag,null=True, blank=True)
     catogrey=models.ForeignKey(Catogrey , on_delete=models.CASCADE, blank=True, null=True)
 
- 
+    def __str__(self):
+        return self.title
 
 
 
