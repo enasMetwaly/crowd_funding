@@ -3,17 +3,13 @@ from django.conf import settings
 
 class Tag(models.Model): 
     name=models.CharField(max_length=100)
-    
-class Catogrey(models.Model):
-    name = models.CharField(max_length=250)
-
-
-
-
-    
     def __str__(self):
         return self.name
-
+class Catogrey(models.Model):
+    name = models.CharField(max_length=250)
+    def __str__(self):
+        return self.name
+    
 
 class Project(models.Model):
 
