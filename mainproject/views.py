@@ -43,16 +43,6 @@ def add_project(request):
             project = project_form.save(commit=False)
             project.creator = request.user  # Assign the current user as the creator
             project.save()
-            
-            new_tag_name = request.POST.get('newTag')
-            if new_tag_name:
-                new_tag, created = Tag.objects.get_or_create(name=new_tag_name)
-                project.tags.add(new_tag)
-
-            selected_tags = request.POST.getlist('tags')
-            existing_tags = Tag.objects.filter(id__in=selected_tags)
-            project.tags.add(*existing_tags)
-
             for image_file in request.FILES.getlist('images'):
                 image = Image(images=image_file, project=project)
                 image.save()
@@ -112,15 +102,13 @@ def details_project(request, id):
     days_diff = (end_date-today).days
     donation_average = (donate["donation__sum"] if donate["donation__sum"] else 0)*100/project.total_target
     average_rating = project.rate_set.all().aggregate(Avg('rate'))['rate__avg']
-    current_project_tags = project.tags.all()
-    print(current_project_tags)
-    related_projects = Project.objects.filter(tags__in=current_project_tags).exclude(id=project.id).distinct()
-    related_projects = related_projects.order_by('-start_time')
-    related_projects = related_projects[:4]
-    print(related_projects)
 
     # return user rating if found
     user_rating = 0
+    current_project_tags = project.tags.all()
+    related_projects = Project.objects.filter(tags__in=current_project_tags).exclude(id=project.id).distinct()
+    related_projects = related_projects.order_by('-start_time')
+    related_projects = related_projects[:4]
     
     if 'user_id' in request.session:
         prev_rating = Project.rate_set.get(user_id=user.id)
@@ -153,6 +141,8 @@ def details_project(request, id):
           'check_target': project.total_target*.25,
           
           'donation': donate["donation__sum"] if donate["donation__sum"] else 0,
+          'current_project_tags':current_project_tags,
+          'related_projects':related_projects,
              }
     return render(request, 'mainproject/details.html', context)
 
