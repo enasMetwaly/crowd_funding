@@ -1,5 +1,5 @@
 {% extends 'index.html' %} {% block title%} Details Project {% endblock %}
-
+{%load static %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
 
@@ -51,14 +51,14 @@
           </div>
           {% if project.image_set.all %}
             <img
-              class="img-fixed-width"
+              class="img-fluid"
               src="{{ project.image_set.all.0.images.url }}"
               alt="{{ project.title }}"
             />
           {% else %}
             <!-- Replace with a default image or message if no image available -->
             <img
-              class="img-fixed-width"
+              class=" img-fluid "
               src="{ project.image_set.all.0.images.url }"
               alt="No Image Available"
             />
@@ -92,35 +92,32 @@
                     <p class="item-intro text-muted">DESCRIPTION:{{ project.details }}</p>
                     
                     <!-- Image slider using Bootstrap Carousel -->
-                    <div id="projectImageSlider{{ project.id }}" class="carousel slide" data-bs-ride="carousel">
+                    
+                    <div id="projectImageSlider{{ project.id }}" class="carousel slide w-100" data-ride="carousel" data-interval="2000">
+                      <ol class="carousel-indicators">
+                        {% for img in project.image_set.all %}
+                          <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+                        {% endfor %}
+                      </ol>
                       <div class="carousel-inner">
                         {% for image in project.image_set.all %}
-                          <div class="carousel-item{% if forloop.first %} active{% endif %}">
-                            <img src="{{ image.images.url }}" class="d-block  ssss" alt="{{ project.title }}">
+                          <div class="carousel-item {% if forloop.first %}active{% endif %}" style="height:400px ">
+                            <img src="{{ image.images.url }}" class="d-block w-100 h-100 rounded " alt="{{ project.title }}">
                           </div>
                         {% endfor %}
                       </div>
-                      <a class="carousel-control-prev" href="#projectImageSlider{{ project.id }}" role="button" data-bs-slide="prev">
+                      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
+                        <span class="sr-only">Previous</span>
                       </a>
-                      <a class="carousel-control-next" href="#projectImageSlider{{ project.id }}" role="button" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
+                      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" ariahidden="true"></span>
+                        <span class="sr-only">Next</span>
                       </a>
                     </div>
-                    
-                    <!-- Additional project details can be displayed here -->
-                    <button
-                      class="btn btn-primary btn-xl text-uppercase"
-                      data-bs-dismiss="modal"
-                      type="button"
-                    >
-                      <i class="fas fa-times me-1"></i>
-                      Close Project
-                    </button>
-                    <a href="{% url 'detailsproject' project.id %}">Details</a>
-                    <a href="{% url 'deleteproject' project.id %}"  class="btn btn-primary mt-3 btn-lg">Delete</a>
+                   <div class="mx-auto col-6 d-flex mt-5 justify-content-between">
+                  <a href="{% url 'detailsproject' project.id %}"  class=" btn btn-primary btn-xl text-uppercase ">Details</a>
+                   </div>
                   </div>
                 </div>
               </div>
@@ -143,3 +140,39 @@
   });
 </script> -->
 {% endblock %}
+
+
+<div class="portfolio-modal modal fade" id="portfolioModal{{ project.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="close-modal" data-bs-dismiss="modal"><img src="{% static 'assets/img/close-icon.svg'%}" alt="Close modal" /></div>
+          <div class="container">
+              <div class="row justify-content-center">
+                  <div class="col-lg-8">
+                      <div class="modal-body">
+                          <!-- Project details-->
+                          <h2 class="text-uppercase">Project Name</h2>
+                          <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                          <img class="img-fluid d-block mx-auto" src="{% static 'assets/img/portfolio/1.jpg'%}" alt="..." />
+                          <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                          <ul class="list-inline">
+                              <li>
+                                  <strong>Client:</strong>
+                                  Threads
+                              </li>
+                              <li>
+                                  <strong>Category:</strong>
+                                  Illustration
+                              </li>
+                          </ul>
+                          <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                              <i class="fas fa-xmark me-1"></i>
+                              Close Project
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
