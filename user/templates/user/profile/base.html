@@ -16,6 +16,12 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{%static 'css/styles.css'%}" rel="stylesheet " />
+        <link href="{%static 'css/user/donation.css'%}" rel="stylesheet " />
+        {% block styles %}
+        <link href="{% static 'css/user/donation.css' %}" rel="stylesheet">
+        {% endblock styles%}
+
+
 </head>
 <body>
 <div class="container-fluid">
@@ -47,6 +53,10 @@
                     </li>
                     <li>
                         <a href="{% url 'delete_user_account' %}">Delete Profile</a>
+
+                    </li>
+                    <li>
+                        <a href="{% url 'donations' %}">donation</a>
 
                     </li>
                     <li>
@@ -83,7 +93,7 @@
                                 <li>
                             {{user.country}}
                             </li>
-                                                                <li>
+                                <li>
                             {{user.fc_account}}
                             </li>
 
@@ -94,11 +104,24 @@
                 <hr>
             </div>
         </div>
-        	{%block page%}
+        {%block page%}
 
         <div class="col py-3">
             Content area...
             <img src="{{user_profile.avatar.url}}" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                <h1>My Projects</h1>
+    <ul>
+        {% for project in user_projects %}
+            <li>
+                <h2>{{ project.title }}</h2>
+                <p>{{ project.description }}</p>
+                <!-- Add more project information here -->
+            </li>
+        {% empty %}
+            <p>You haven't created any projects yet.</p>
+        {% endfor %}
+    </ul>
+
 
         </div>
         	{%endblock%}

@@ -1,5 +1,80 @@
-{% extends base.html %}
+{% extends "./base.html" %}
+
+
 {% block page %}
-donatation
+<div style="margin:auto">
+    <ul>
+        <li>
+                <div class="text-center">
+            <h1 >My Donations</h1>
+
+    </div>
+
+        </li>
+        {% for donation in user_donations %}
+            <li>
+<!--                <a href="{% url 'detailsproject' donation.project.id %}">  &lt;!&ndash; Link to project details &ndash;&gt;-->
+<!--                    {{ donation.project.title }}-->
+<!--                </a>-->
+<!--                <p>Donation Amount: ${{ donation.donation_amount }}</p>-->
+                <!-- Add more donation information here -->
+<div class="col-xl-12 col-lg-10">
+                <div class="card l-bg-blue-dark">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="mb-4">
+                            <h5 class="card-title mb-0">
+                                {{ donation.project.title }}
+                            </h5>
+                        </div>
+                        <div class="row align-items-center mb-2 d-flex">
+                            <div class="col-8">
+                                <h2 class="d-flex align-items-center mb-0">
+                                 ${{ donation.donation_amount }}
+                                </h2>
+                                <p>
+                                    {{ donation.created_at }}
+
+                                </p>
+                            </div>
+                            <div class="col-4 text-right">
+
+                                <a href="{% url 'detailsproject' donation.project.id %}" class="no-underline">
+                                <i class="fa fa-arrow-up" style="color: white;"></i>
+                                </a>
+
+<!--                                <a >2.5% <i class="fa fa-arrow-up"></i></a>-->
+                            </div>
+                        </div>
+                        <div class="progress mt-1 " data-height="8" style="height: 8px;">
+                            <div class="progress-bar l-bg-cyan" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%;"></div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+            </li>
+        {% empty %}
+            <p>You haven't made any donations yet.</p>
+        {% endfor %}
+    </ul>
+ </div>
+<style>
+    /* Add this CSS to remove the underline from the link */
+    a  {
+    text-decoration: none; /* Remove the underline on normal state */
+    font-size: 1rem; /* Set the default font size */
+
+    }
+    a:hover{
+        text-decoration: none; /* Remove the underline on hover state */
+    font-size: 1.4rem; /* Set the larger font size on hover */
+
+    }
+    ul{
+        list-style: none;
+
+    }
+</style>
+
 {%endblock%}
 

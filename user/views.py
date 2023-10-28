@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from .forms import UserProfileForm
 from .models import User, UserProfile
-from mainproject.models import Project
+from mainproject.models import Project,Donation
 
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -21,16 +21,29 @@ def profile(request):
     user_projects = Project.objects.filter(creator_id=request.user.id)
     # return render(request, 'user/profile/base.html')
 
-    return render(request, 'user/profile/base.html', {'projects': user_projects, 'donations': False,'user':user,'user_profile':user_profile})
+    return render(request, 'user/profile/base.html', {'user_projects': user_projects, 'donations': False,'user':user,'user_profile':user_profile})
+
+
+    # return render(request, 'user/profile/base.html', {'projects': user_projects, 'donations': False,'user':user,'user_profile':user_profile})
 
 @login_required
-# def donations(request):
-#     user_donations = Donation.objects.filter(
-#     donator_id=request.user.id)
-#     projects  = Project.objects.all()
-#     return render(request, 'profile/base.html', {'user_donations': user_donations,
-#                                                  'projects': projects, 'donations': True})
 #
+def donations(request):
+    # Get the user's donations
+    user_donations = Donation.objects.filter(user=request.user)
+
+    # Extract the projects from the user's donations
+    project_ids = user_donations.values_list('project_id', flat=True)
+
+    # Query the Project model to retrieve the associated projects
+    projects = Project.objects.filter(id__in=project_ids)
+
+    return render(request, 'user/profile/user_donation.html', {
+        'user_donations': user_donations,
+        'projects': projects,
+        'donations': True,
+    })
+
 
 @login_required
 def edit_profile(request):
