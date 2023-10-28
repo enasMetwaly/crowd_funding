@@ -56,7 +56,33 @@
               </p>
               <p class="text-secondary"><span class="text-sm text-dark">from: {{project.start_time}}</span>
                 <span class="text-sm text-dark"> to: </span>{{project.end_time}}</p>
-
+                <hr class="my-4" />
+                <div class="tags_container">
+                  {% for tag in current_project_tags %}
+                      <a href="#" class="bg-light py-1 px-2 rounded">{{ tag }}</a>
+                  {% endfor %}
+              </div>
+              
+              <hr class="my-4" />
+             <!-- Related Projects -->
+                <!-- Related Projects -->
+                <h4 class="">Related Projects:</h4>
+                <div class="col-md-12 d-flex justify-content-around py-3 flex-wrap">
+                {% for related_project in related_projects %}
+                <div class="col-md-5 card p-3 mt-2">
+                  <a href="{% url 'detailsproject' related_project.id %}">
+                    <div style="height: 150px">
+                      <!-- Display the first image of the related project (you may need to adjust this based on your project structure) -->
+                      <img src="{{ related_project.image_set.first.images.url }}" alt="project-img" class="img-fluid rounded" style="height: inherit; width: 100%;">
+                    </div>
+                  </a>
+                  <a href="{% url 'detailsproject' related_project.id %}" class="text-dark">
+                    <h6 class="my-3 text-center">{{ related_project.title|title }}</h6>
+                  </a>
+                </div>
+                {% endfor %}
+                </div>
+                <hr class="my-5" />
               <hr class="my-4" />
               <!-- Comments -->
               <h5 class="mt-5">Comments ({{ comments|length }}) :</h5>

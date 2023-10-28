@@ -114,6 +114,10 @@ def details_project(request, id):
     average_rating = project.rate_set.all().aggregate(Avg('rate'))['rate__avg']
     # return user rating if found
     user_rating = 0
+    current_project_tags = project.tags.all()
+    related_projects = Project.objects.filter(tags__in=current_project_tags).exclude(id=project.id).distinct()
+    related_projects = related_projects.order_by('-start_time')
+    related_projects = related_projects[:4]
     
     if 'user_id' in request.session:
         # prev_rating = Project.rate_set.get(user_id=user.id)
@@ -142,7 +146,8 @@ def details_project(request, id):
           'check_target': project.total_target*.25,
           'check_target': project.total_target*.25,
           'donation': donate["donation__sum"] if donate["donation__sum"] else 0,
-      
+          'current_project_tags':current_project_tags,
+          'related_projects':related_projects,
              }
     return render(request, 'mainproject/details.html', context)
 
