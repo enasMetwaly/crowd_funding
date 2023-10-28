@@ -127,6 +127,34 @@ def home(request):
 #     return render(request, "authentication/register.html", {"form": form})
 from django.core.files.base import ContentFile
 
+# def register(request):
+#     if request.method == 'POST':
+#         form = RegisterForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             user = form.save()
+#
+#             # Handle file upload
+#             uploaded_image = request.FILES.get('profile_image')
+#             if uploaded_image:
+#                 user_profile, created = UserProfile.objects.get_or_create(user=user)
+#                 user_profile.avatar.save(
+#                     uploaded_image.name,
+#                     ContentFile(uploaded_image.read())
+#                 )
+#                 user_profile.save()
+#
+#                 # Send activation email and redirect to login or another page
+#                 send_activation_email(request, form.cleaned_data.get('email'), user)
+#
+#             return render(request, "authentication/registeration/login.html", {"form": form})
+#     else:
+#         form = RegisterForm()
+#
+#     return render(request, "authentication/register.html", {"form": form})
+
+#
+from django.core.files.base import ContentFile
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST, request.FILES)
@@ -146,13 +174,13 @@ def register(request):
                 # Send activation email and redirect to login or another page
                 send_activation_email(request, form.cleaned_data.get('email'), user)
 
-            return redirect("login")
+            return render(request, "authentication/login.html", {"form": form})
     else:
         form = RegisterForm()
 
     return render(request, "authentication/register.html", {"form": form})
 
-#
+
 
 def login(request):
     form = LoginForm(data=request.POST or None)
