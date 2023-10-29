@@ -50,12 +50,27 @@ class ProjectForm(forms.ModelForm):
             }
         ))
 
-    category = forms.ModelChoiceField(queryset=Catogrey.objects.all(),
-                                      widget=forms.Select(
-                                          attrs={
-                                              "class": "form-control"
-                                          }
-                                      ))
+
+
+    # category = forms.ChoiceField(
+    #     choices=[(catogrey.id, catogrey.name) for catogrey in Catogrey.objects.all()],
+    #     widget=forms.Select(attrs={"class": "form-control"})
+    # )
+
+
+
+
+    # tags = forms.MultipleChoiceField(
+    #     choices=[(tag.id, tag.name) for tag in Tag.objects.all()],
+    #     widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+    #     required=False
+    # )
+    # category = forms.ModelChoiceField(queryset=Catogrey.objects.all(),
+    #                                   widget=forms.Select(
+    #                                       attrs={
+    #                                           "class": "form-control"
+    #                                       }
+    #                                   ))
 
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),
                                           widget=forms.SelectMultiple(
@@ -63,6 +78,18 @@ class ProjectForm(forms.ModelForm):
                                                   "class": "form-control"
                                               }
                                           ), required=False)
+    category = forms.ModelChoiceField(queryset=Catogrey.objects.all(),
+                                      widget=forms.Select(
+                                          attrs={
+                                              "class": "form-control"
+                                          }
+                                      ), required=False)
+
+    # category = forms.ChoiceField(
+    #     choices=[(catogrey.id, catogrey.name) for catogrey in Catogrey.objects.all()],
+    #     widget=forms.Select(attrs={"class": "form-control"})
+    # )
+
 
     class Meta:
         model = Image  # Replace with your actual Image model
@@ -124,13 +151,13 @@ class Reply_form(forms.ModelForm):
         fields = ['reply']
 
 
-class Category_form(forms.ModelForm):
-    class Meta:
-        model = Catogrey
-        fields = ['name']
-
+# class Category_form(forms.ModelForm):
+#     class Meta:
+#         model = Catogrey
+#         fields = ['name']
+#
 # Catogries =forms.ChoiceField(choices= [ (catogrey.id, catogrey.name) for catogrey in Catogrey.objects.all() ] )
-
+#
 # class Meta:
 #     model = Project
 #     fields = ['title', 'details', 'total_target', 'start_time', 'end_time','tags']

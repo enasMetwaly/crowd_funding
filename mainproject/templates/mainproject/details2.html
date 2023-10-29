@@ -1,6 +1,5 @@
 {% extends 'index.html' %}
 {%load static%}
-{% block title %} Project Details {% endblock title %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="/../../../static/css/project-details.css">
@@ -31,32 +30,34 @@
           <div class="card card-plain d-flex flex-row justify-content-between">
             <!-- Project Details On Left -->
             <div class="col-md-7">
-<!--              <div id="carouselExampleIndicators" class="carousel slide w-100" data-ride="carousel" data-interval="500">-->
-<!--                <ol class="carousel-indicators">-->
-<!--                  {% for img in project.image_set.all %}-->
-<!--                    <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>-->
-<!--                  {% endfor %}-->
-<!--                </ol>-->
-<!--                <div class="carousel-inner">-->
-<!--                  {% for img in project.image_set.all %}-->
-<!--                    <div class="carousel-item {% if forloop.first %}active{% endif %}" style="height:400px">-->
-<!--                      <img src="{{ img.images.url }}" class="d-block w-100 h-100 rounded " alt="{{ project.title }}">-->
-<!--                    </div>-->
-<!--                  {% endfor %}-->
-<!--                </div>-->
-<!--                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">-->
-<!--                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
-<!--                  <span class="sr-only">Previous</span>-->
-<!--                </a>-->
-<!--                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">-->
-<!--                  <span class="carousel-control-next-icon" ariahidden="true"></span>-->
-<!--                  <span class="sr-only">Next</span>-->
-<!--                </a>-->
-<!--              </div>-->
-
-<div id="imageCarousel" class="carousel slide" data-ride="carousel">
+                <div id="imageCarousel" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
-        <div class="carousel-item active">
+        {% if donation > 0 %}
+            <div class="carousel-item active">
+                <div class="images_before">
+                    <h2>Images Before</h2>
+                    <div class="image-container">
+                        {% for image in images_before %}
+                            {% if image %}
+                                <img src="{{ image.url }}" alt="Image Before" class="img-fluid" style="max-width: 50%;"><!-- Adjust the max-width as needed -->
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="images_after">
+                    <h2>Images After</h2>
+                    <div class="image-container">
+                        {% for image in images_after %}
+                            {% if image %}
+                                <img src="{{ image.url }}" alt="Image After" class="img-fluid" style="max-width: 50%;"><!-- Adjust the max-width as needed -->
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
             <div class="images_before">
                 <h2>Images Before</h2>
                 <div class="image-container">
@@ -67,29 +68,56 @@
                     {% endfor %}
                 </div>
             </div>
-        </div>
-        <div class="carousel-item">
-            <div class="images_after">
-                <h2>Images After</h2>
-                <div class="image-container">
-                    {% for image in images_after %}
-                        {% if image %}
-                            <img src="{{ image.url }}" alt="Image After" class="img-fluid" style="max-width: 50%;"><!-- Adjust the max-width as needed -->
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+        {% endif %}
     </div>
     <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
     </a>
     <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="carousel-control-next-icon" ariahidden="true"></span>
         <span class="sr-only">Next</span>
     </a>
 </div>
+
+
+
+<!--<div id="imageCarousel" class="carousel slide" data-ride="carousel">-->
+<!--    <div class="carousel-inner">-->
+<!--        <div class="carousel-item active">-->
+<!--            <div class="images_before">-->
+<!--                <h2>Images Before</h2>-->
+<!--                <div class="image-container">-->
+<!--                    {% for image in images_before %}-->
+<!--                        {% if image %}-->
+<!--                            <img src="{{ image.url }}" alt="Image Before" class="img-fluid" style="max-width: 50%;">&lt;!&ndash; Adjust the max-width as needed &ndash;&gt;-->
+<!--                        {% endif %}-->
+<!--                    {% endfor %}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="carousel-item">-->
+<!--            <div class="images_after">-->
+<!--                <h2>Images After</h2>-->
+<!--                <div class="image-container">-->
+<!--                    {% for image in images_after %}-->
+<!--                        {% if image %}-->
+<!--                            <img src="{{ image.url }}" alt="Image After" class="img-fluid" style="max-width: 50%;">&lt;!&ndash; Adjust the max-width as needed &ndash;&gt;-->
+<!--                        {% endif %}-->
+<!--                    {% endfor %}-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">-->
+<!--        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+<!--        <span class="sr-only">Previous</span>-->
+<!--    </a>-->
+<!--    <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">-->
+<!--        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+<!--        <span class="sr-only">Next</span>-->
+<!--    </a>-->
+<!--</div>-->
 
               <h5 class="mt-5">What The Funds Are For:</h5>
               <p>
@@ -99,6 +127,50 @@
                 <span class="text-sm text-dark"> to: </span>{{project.end_time}}</p>
 
               <hr class="my-4" />
+                <section>
+                    <div class="tags_container">
+                        {% for tag in current_project_tags %}
+                        <a href="#" class="bg-light py-1 px-2 rounded">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+
+                    <hr class="my-4"/>
+                    <!-- Related Projects -->
+                    <!-- Related Projects -->
+                    <h4 class="">Related Projects:</h4>
+                    <div class="col-md-12 d-flex justify-content-around py-3 flex-wrap">
+                        {% for related_project in related_projects %}
+                        <div class="col-md-5 card p-3 mt-2">
+                            <a href="{% url 'detailsproject' related_project.id %}">
+                                <div style="height: 300px">
+                                    {% for img in all_imgs %}
+                                    {% if img.project_id == related_project.id and img.images_before %}
+                                    <img src="{{ img.images_before.url }}" alt="Image Before" class="img-fluid">
+                                    {% endif %}
+                                    {% endfor %}
+
+
+
+                                </div>
+                            </a>
+                            <a href="{% url 'detailsproject' related_project.id %}" class="text-dark">
+                                <h6 class="my-3 text-center">{{ related_project.title|title }}</h6>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <hr class="my-5"/>
+                    <hr class="my-4"/>
+                    <div>{{project.category}}</div>
+                    <hr class="my-5"/>
+                    <div class="tags_container">
+                        {% for tag in current_project_tags %}
+                        <a href="#" class="bg-light py-1 px-2 rounded">{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+
+
+                </section>
               <!-- Comments -->
               <h5 class="mt-5">Comments ({{ comments|length }}) :</h5>
               <ul class="list-unstyled mt-4">
@@ -283,6 +355,9 @@
     </div>
   </div>
 </div>
+<section>
+
+</section>
 <style>
     /* Move the previous and next arrow controls outside the image containers */
     .carousel-control-prev, .carousel-control-next {

@@ -1,0 +1,70 @@
+<!-- Add this code to your search_result.html template -->
+{% extends 'index.html' %}
+{%load static%}
+{% block title %} Project Details {% endblock title %}
+    {% block stylesheets %}
+                <link href="{% static 'css/user/user_project.css' %}" rel="stylesheet">
+
+    {% endblock %}
+
+{% block project %}
+
+<!--<div class="container">-->
+<!--    <div class="text-center">-->
+<!--        <h2 class="section-heading text-uppercase">Search Results</h2>-->
+<!--        <h3 class="section-subheading text-muted">Projects related to your search</h3>-->
+<!--    </div>-->
+
+<!--    <div class="row">-->
+<!--        {% for project in similar_projects %}-->
+<!--        <div class="col-lg-4 col-sm-6 mb-4">-->
+<!--            <div class="portfolio-item">-->
+<!--                <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal{{ project.id }}">-->
+<!--                    <div class="portfolio-hover">-->
+<!--                        <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>-->
+<!--                    </div>-->
+<!--                    {% for img in images %}-->
+<!--                    {% if img.project_id == project.id and img.images_before %}-->
+<!--                    <img src="{{ img.images_before.url }}" alt="Image Before" class="img-fluid">-->
+<!--                    {% endif %}-->
+<!--                    {% endfor %}-->
+<!--                </a>-->
+<!--                <div class="portfolio-caption">-->
+<!--                    <div class="portfolio-caption-heading">{{ project.title }}</div>-->
+<!--                    <div class="portfolio-caption-subheading text-muted">{{ project.details }}</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+<!--</div>-->
+
+<h1>Similar Projects</h1>
+
+{% for similar_project in similar_projects %}
+    <div class="cardcontainer">
+        <div class="photo">
+            {% for img in imgs %}
+                {% if img.project_id == similar_project.id and img.images_before %}
+                    <img src="{{ img.images_before.url }}">
+                    <div class="photos">Photos</div>
+                    <!-- You can add more logic here if needed -->
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="content">
+            <p class="txt4">{{ similar_project.title }}</p>
+            <p class="txt5">{{ similar_project.creator }}</p>
+            <p class="txt2">{{ similar_project.details }}</p>
+            <p class="txt2">{{ similar_project.total_target }}</p>
+        </div>
+        <div class="footer">
+            <p><a class="waves-effect waves-light btn" href="#">Read More</a><a href="{% url 'detailsproject' similar_project.id %}" id="arrow-up"><span class="like"><i class="fas fa-arrow-up"></i></span></a></p>
+            <p class="txt3"><i class="far fa-clock"></i>{{ similar_project.start_time }}<span class="comments"><i class="fas fa-comments"></i>{{ similar_project.end_time }}</span></p>
+        </div>
+    </div>
+{% empty %}
+    <p>No similar projects found.</p>
+{% endfor %}
+
+{% endblock %}

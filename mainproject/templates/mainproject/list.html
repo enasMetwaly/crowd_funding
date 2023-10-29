@@ -1,5 +1,4 @@
 {% extends 'index.html' %}
-{% block title%} Details Project {% endblock %}
 
 {% block project  %}
 
@@ -51,20 +50,20 @@
 <!--            alt="{{ currentProduct.name }}"-->
 <!--          />-->
 <!--          {% endfor %}-->
-             <h3>Images Before</h3>
+             <p>Images Before</p>
                 <div class="image-container">
                     {% for image in imgs %}
                         {% if image.project.id == project.id and image.images_before %}
-<img src="{{ image.images_before.url }}" alt="Image Before" class="img-fluid">
+<img src="{{ image.images_before.url }}" alt="Image Before" class="img-fluid" style="max-width: 50%;">
                         {% endif %}
                     {% endfor %}
                 </div>
 
-                <h3>Images After</h3>
+                <p>Images After</p>
                 <div class="image-container">
                     {% for image in imgs %}
                         {% if image.project.id == project.id and image.images_after %}
-                            <img src="{{ image.images_after.url }}" alt="Image After">
+                            <img src="{{ image.images_after.url }}" alt="Image After" class="img-fluid" style="max-width: 50%;">
                         {% endif %}
                     {% endfor %}
                 </div>

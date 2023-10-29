@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect,get_object_or_404,HttpResponseRedirect
 from .forms import *
 from .models import *
@@ -32,47 +32,132 @@ from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
 NULL = {}
+from django.template import loader
+import re
+from django.shortcuts import render, redirect
+from .forms import ProjectForm
+from .models import Project, Tag, Catogrey
 
+from .models import Catogrey, Project, Image
+from django.db.models import Avg
 
 from .forms import ProjectForm, PicturesForm  # Make sure to import your ProjectForm and PicturesForm
 
 import os
 from decimal import Decimal  # Import Decimal from the decimal module
 from django.http import HttpResponseRedirect
+from django.http import HttpResponseNotFound
+from django.db.models import Q
+from django.shortcuts import render
+from .models import Project, Tag
+
+from django.http import HttpResponseNotFound
+from django.db.models import Q, Sum
+from django.shortcuts import render
+from .models import Project, Tag
+from django.urls import reverse
+
 
 def my_view(request):
     user = request.user
     return HttpResponse(f"Hello, {user}!")
 
 
+
+
+
+def home_page(req):
+    latest_projects = Project.objects.order_by('start_time')[:5]
+    # Select 5 featured projects
+    featured_projects = Project.objects.filter(is_featured=True)[:5]
+
+    # Calculate the average rating for each project and annotate it
+    top_rated_projects = Project.objects.annotate(
+        average_rating=Avg('rate__rate')
+    ).exclude(average_rating=None).order_by('-average_rating')[:5]
+
+    imgs = Image.objects.all()
+    all_projects=Project.objects.all()
+
+    # Get all categories
+    categories = Catogrey.objects.all()
+
+    # Create a dictionary to store projects for each category
+    category_projects = {}
+    print("Latest Projects: " + str(latest_projects))
+    print("Images: " + str(imgs))
+
+    print("all projects: " + str(all_projects))
+
+    for category in categories:
+        projects = Project.objects.filter(catogrey=category)
+        category_projects[category] = projects
+    print("category_projects: " + str(category_projects))
+
+
+    return render(req, 'index.html', {
+        'latest_projects': latest_projects,
+        'imgs': imgs,
+        'top_rated_projects': top_rated_projects,
+        'categories': categories,
+        'category_projects': category_projects,
+        'all_projects':all_projects,
+        'featured_projects':featured_projects
+    })
+
+
+
+
+
+
+
+
+
 def add_project(request):
     if request.method == 'POST':
         project_form = ProjectForm(request.POST)
-        pictures_form = PicturesForm(request.POST, request.FILES, instance=Project())  # Pass an instance of the project
-        if project_form.is_valid() and pictures_form.is_valid():
+        pictures_form = PicturesForm(request.POST, request.FILES)
+
+        if project_form.is_valid():
             project = project_form.save(commit=False)
             project.creator = request.user
+
+            # Check if an existing category was selected
+            selected_category_id = request.POST.get('category')
+            if selected_category_id:
+                project.catogrey = Catogrey.objects.get(pk=selected_category_id)
+            else:
+                # If no existing category was selected, check if a new category was provided
+                new_category_name = request.POST.get('newCategory')
+                if new_category_name:
+                    new_category, created = Catogrey.objects.get_or_create(name=new_category_name)
+                    project.catogrey = new_category
+
+            # Save the project to generate an ID
             project.save()
+
+            # Handle selected tags
+            selected_tags = request.POST.getlist('tags')
+            project.tags.set(selected_tags)  # Set the selected tags for the project
 
             images_before = request.FILES.getlist('images_before')
             images_after = request.FILES.getlist('images_after')
 
             for image in images_before:
-                image_obj = Image.objects.create(images_before=image,
-                                                 project=project)  # Create an Image object for "before" image
+                image_obj = Image.objects.create(images_before=image, project=project)
                 image_obj.save()
 
             for image in images_after:
-                image_obj = Image.objects.create(images_after=image,
-                                                 project=project)  # Create an Image object for "after" image
+                image_obj = Image.objects.create(images_after=image, project=project)
                 image_obj.save()
 
-            return render(request, 'mainproject/list.html', {'images_before': images_before, 'images_after': images_after})
+            return HttpResponseRedirect(reverse('listproject'))
         else:
             print("Form is not valid")
     else:
         project_form = ProjectForm()
-        pictures_form = PicturesForm(instance=Project())
+        pictures_form = PicturesForm()
+
     return render(request, 'mainproject/add.html', {'project_form': project_form, 'pictures_form': pictures_form})
 
 
@@ -121,7 +206,10 @@ def details_project(request, id):
     # Convert the project total_target to a float
     total_target = float(project.total_target)
     donation_average = (donate["donation_amount__sum"] if donate["donation_amount__sum"] else 0) * 100 / total_target
+    all_imgs=Image.objects.all()
+
     imgs = Image.objects.filter(project_id=id)
+
     for img in imgs:
         print(img.images_before)
         print(img.images_before)
@@ -151,7 +239,12 @@ def details_project(request, id):
     reply = Reply_form()
     replies = Reply.objects.all()
 
-
+    current_project_tags = project.tags.all()
+    related_projects = Project.objects.filter(tags__in=current_project_tags).exclude(id=project.id).distinct()
+    related_projects = related_projects.order_by('-start_time')
+    related_projects = related_projects[:4]
+    print("Related Projects:")
+    print(related_projects)
     context = {
         'project': project,
         'donation': donate["donation_amount__sum"] if donate["donation_amount__sum"] else 0,
@@ -172,6 +265,9 @@ def details_project(request, id):
         'reply_form': reply,
         'comments': comments,
         'report_form': new_report_form,
+        'current_project_tags': current_project_tags,
+        'related_projects': related_projects,
+        'all_imgs':all_imgs
 
     }
     print(context['images_before'])
@@ -302,3 +398,68 @@ def add_comment_report(request, comment_id):
             user_id=user.id
         )
         return redirect('detailsproject', project.id)
+
+
+# def get_tag_projects(request, tag_id):
+#     if 'user_id' not in request.session:
+#         user = NULL
+#     else:
+#         user = request.user
+#         context = {}
+#     try:
+#         tag = Tag.objects.get(id=tag_id)
+#         projects = tag.project_set.all()
+#
+#         donations = []
+#         progress_values = []
+#         images = []
+#         for project in projects:
+#             donate = project.donation_set.all().aggregate(Sum("donation"))
+#             total_donation = donate["donation__sum"] if donate["donation__sum"] else 0
+#
+#             progress_values.append(total_donation * 100 / project.total_target)
+#             donations.append(total_donation)
+#             images.append(project.image_set.all().first().images.url)
+#
+#         context = {
+#             'title': tag,
+#             'projects': projects,
+#             'images': images,
+#             'donations': donations,
+#             'progress_values': progress_values,
+#             'user': user
+#         }
+#         return render(request, "home/tag-projects.html", context)
+#     except Project.DoesNotExist:
+#         html_template = loader.get_template('home/page-404.html')
+#         return HttpResponse(html_template.render(context, request))
+
+
+from django.db.models import Q
+
+
+
+def get_tag_projects(request, tag_name):
+    if 'user_id' not in request.session:
+        user = None
+    else:
+        user = request.user
+
+    try:
+        # Get similar projects based on the tag name or title
+        similar_projects = Project.objects.filter(
+            Q(tags__name=tag_name) | Q(title__icontains=tag_name)
+        ).distinct()
+
+        imgs = Image.objects.all()
+        print(imgs)
+
+        context = {
+            'title': tag_name,  # Use tag_name as the title
+            'similar_projects': similar_projects,
+            'user': user,
+            'imgs':imgs,
+        }
+        return render(request, "mainproject/search_result.html", context)
+    except Tag.DoesNotExist:
+        return HttpResponseNotFound("Page not found")

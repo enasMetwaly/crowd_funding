@@ -4,15 +4,6 @@
 
 
   {% block project  %}
-  <!-- <div class="container col-6 m-auto"></div>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ project_form.as_p }}
-    {{ pictures_form.as_p }}
-
-    <button type="submit">Add Project</button>
-  </form>
-</div> -->
 
 <div class="container">
   <div class="py-5 mx-auto">
@@ -54,23 +45,21 @@
             {{ project_form.end_time }}
           </div>
           <span class="text-error">{{ project_form.end_time.errors }}</span>
-
-          <div class="mb-3">
-            <label class="form-label">Category</label>
-
-            {{ project_form.category }}
-          </div>
-          <span class="text-error">{{ project_form.category.errors }}</span>
-
-
-          <div class="mb-3">
+            <div class="mb-3">
             <label class="form-label">Add tag</label>
             <input type="text" class="inp form-control my-1" maxlength="8" name="newTag" class="form-control"  id="id_tag"/>
             <span class="show_tag " style="padding: 2px;background-color: rgba(145, 9, 120, 0.61);border-radius: 15%; color: rgb(241, 240, 255);"></span>
             <p style="margin: 2px; color: black; font-size: small; font-weight: 550;">or choose one : </p>
             {{ project_form.tags }}
-          </div>
-          <span class="text-error">{{ project_form.tags.errors }}</span>
+                      </div>
+
+            <div class="mb-3">
+    <label class="form-label">Category</label>
+    <input type="text" class="inp form-control my-1" maxlength="8" name="newCategory" class="form-control" id="id_category" />
+    <span class="show_tag" style="padding: 2px; background-color: rgba(145, 9, 120, 0.61); border-radius: 15%; color: rgb(241, 240, 255);"></span>
+    <p style="margin: 2px; color: black; font-size: small; font-weight: 550;">or choose one : </p>
+    {{ project_form.category }}
+</div>
 
 <div class="mb-3">
     <label class="form-label">Before Development Photos</label><br />
@@ -105,6 +94,7 @@ input.addEventListener('keyup', () =>{
 
 
 });
+
 </script>
 
 {% endblock %}
