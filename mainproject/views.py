@@ -56,6 +56,7 @@ from django.db.models import Q, Sum
 from django.shortcuts import render
 from .models import Project, Tag
 from django.urls import reverse
+from django.db.models import Q
 
 
 def my_view(request):
@@ -112,7 +113,7 @@ def home_page(req):
 
 
 
-
+@login_required
 def add_project(request):
     if request.method == 'POST':
         project_form = ProjectForm(request.POST)
@@ -160,17 +161,18 @@ def add_project(request):
 
     return render(request, 'mainproject/add.html', {'project_form': project_form, 'pictures_form': pictures_form})
 
+# @login_required
 
-def delete_project(request, id):
-    project = Project.objects.get(id=id)
-    images = Image.objects.filter(project=project)
-    for image in images:
-        image_path = image.images.path
-        if os.path.exists(image_path):
-            os.remove(image_path)
-    images.delete()
-    project.delete()
-    return HttpResponseRedirect('/mainproject/list')
+# def delete_project(request, id):
+#     project = Project.objects.get(id=id)
+#     images = Image.objects.filter(project=project)
+#     for image in images:
+#         image_path = image.images.path
+#         if os.path.exists(image_path):
+#             os.remove(image_path)
+#     images.delete()
+#     project.delete()
+#     return HttpResponseRedirect('/mainproject/list')
 
 def list_project(request):
     context={}
@@ -181,6 +183,7 @@ def list_project(request):
     # project = get_object_or_404(Project, id=id)
     return render(request, 'mainproject/list.html', context)
 
+@login_required
 
 def donate(request, id):
     user = request.user
@@ -344,6 +347,7 @@ def apply_rating(project, user, rating):
         Rate.objects.create(
             rate=rating, projcet_id=project.id, user_id=user)
 
+@login_required
 
 def create_comment(request, project_id):
     user = request.user
@@ -357,6 +361,7 @@ def create_comment(request, project_id):
             return redirect('detailsproject', project_id)
     return render(request, "mainproject/details2.html", project_id, context={"user": user})
 
+@login_required
 
 def create_comment_reply(request, comment_id):
     user = request.user
@@ -373,6 +378,7 @@ def create_comment_reply(request, comment_id):
             return redirect('detailsproject', project.id)
     return render(request, "mainproject/details2.html", project.id)
 
+@login_required
 
 def add_report(request, project_id):
     user = request.user
@@ -400,42 +406,8 @@ def add_comment_report(request, comment_id):
         return redirect('detailsproject', project.id)
 
 
-# def get_tag_projects(request, tag_id):
-#     if 'user_id' not in request.session:
-#         user = NULL
-#     else:
-#         user = request.user
-#         context = {}
-#     try:
-#         tag = Tag.objects.get(id=tag_id)
-#         projects = tag.project_set.all()
-#
-#         donations = []
-#         progress_values = []
-#         images = []
-#         for project in projects:
-#             donate = project.donation_set.all().aggregate(Sum("donation"))
-#             total_donation = donate["donation__sum"] if donate["donation__sum"] else 0
-#
-#             progress_values.append(total_donation * 100 / project.total_target)
-#             donations.append(total_donation)
-#             images.append(project.image_set.all().first().images.url)
-#
-#         context = {
-#             'title': tag,
-#             'projects': projects,
-#             'images': images,
-#             'donations': donations,
-#             'progress_values': progress_values,
-#             'user': user
-#         }
-#         return render(request, "home/tag-projects.html", context)
-#     except Project.DoesNotExist:
-#         html_template = loader.get_template('home/page-404.html')
-#         return HttpResponse(html_template.render(context, request))
 
 
-from django.db.models import Q
 
 
 

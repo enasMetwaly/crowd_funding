@@ -34,28 +34,37 @@
 </head>
 <body id="page-top">
 <!-- Navigation-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-primary m-2">
     <div class="container">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home' %}">Home</a>
-                        </li>
+<!--                <li class="nav-item">-->
+<!--                            <a class="nav-link" href="{% url 'home' %}">Home</a>-->
+<!--                        </li>-->
 
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link active" aria-current="page" href="#">-->
+<!--                        <a class="category-link" data-bs-toggle="modal" href="#categoryModal">-->
+<!--                            <div class="category-hover">-->
+<!--                                <div class="category-hover-content">-->
+<!--                                    Categories-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </a>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">
-                        <a class="category-link" data-bs-toggle="modal" href="#categoryModal">
-                            <div class="category-hover">
-                                <div class="category-hover-content">
-                                    Categories
-                                </div>
-                            </div>
-                        </a>
-                    </a>
-                </li>
+    <a class="nav-link" href="{% url 'home' %}">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#categoryModal">
+        Categories
+    </a>
+</li>
+
                 <li class="nav-item">
                             <a class="nav-link" href="{% url 'listproject' %}">projects</a>
                 </li>
@@ -83,11 +92,18 @@
         </div>
     </div>
 </nav>
-
-<form id="searchForm" action="{% url 'get_tag_projects' 'tag_name_placeholder' %}" method="get">
-    <input type="text" id="searchQuery" name="tag_name" placeholder="Search by Tag Name">
-    <button type="submit">Search</button>
+<form id="searchForm" action="{% url 'get_tag_projects' 'tag_name_placeholder' %}" method="get" class="m-4">
+    <div class="input-group">
+        <input type="text" id="searchQuery" name="tag_name" class="form-control" placeholder="Search ">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
 </form>
+
+
+<!--<form id="searchForm" action="{% url 'get_tag_projects' 'tag_name_placeholder' %}" method="get">-->
+<!--    <input type="text" id="searchQuery" name="tag_name" placeholder="Search by Tag Name">-->
+<!--    <button type="submit">Search</button>-->
+<!--</form>-->
 <!-- Masthead-->
 <!--<header class="masthead">-->
 <!--    <div class="container">-->
