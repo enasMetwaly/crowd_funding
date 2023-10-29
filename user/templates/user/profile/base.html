@@ -17,31 +17,72 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{%static 'css/styles.css'%}" rel="stylesheet " />
         <link href="{%static 'css/user/donation.css'%}" rel="stylesheet " />
+                <link href="{% static 'css/user/user_project.css' %}" rel="stylesheet">
+
         {% block styles %}
-        <link href="{% static 'css/user/donation.css' %}" rel="stylesheet">
+
         {% endblock styles%}
+<style>
+    /* Add this CSS to remove the underline from the link */
+    a  {
+    text-decoration: none; /* Remove the underline on normal state */
+    font-size: 1rem; /* Set the default font size */
+
+    }
+    a:hover{
+        text-decoration: none; /* Remove the underline on hover state */
+    font-size: 1.4rem; /* Set the larger font size on hover */
+
+    }
+    ul{
+        list-style: none;
+
+    }
+    <style>
+    /* Remove underline from links in the sidebar when hovered or clicked */
+    a, a:hover, a:active, a:focus {
+        text-decoration: none;
+    }
+
+    /* Set text color to white for links in the sidebar */
+    a, a:hover, a:active, a:focus {
+        color: white;
+    }
+
+    /* Set the larger font size on hover for links */
+    a:hover {
+        font-size: 1.4rem;
+    }
+
+    ul {
+        list-style: none;
+    }
+        ul.nav a:hover {
+        text-decoration: none;
+    }
+
+
+</style>
 
 
 </head>
 <body>
-<div class="container-fluid">
 
-    <div class="row flex-nowrap">
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+<div class="row flex-nowrap">
+        <div class="col-auto col-md-4 col-xl-2 px-sm-2 px-0 bg-dark text-white">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                                 <div class="dropdown pb-4">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="   {{user_profile.avatar.url}}" alt="hugenerd" width="60" height="60" class="rounded-circle">
+<!--                        <img src="   {{user_profile.avatar.url}}" alt="hugenerd" width="60" height="60" class="rounded-circle">-->
+                        <img src="   {{user.avatar.url}}" alt="hugenerd" width="60" height="60" class="rounded-circle">
+
                         <span class="d-none d-sm-inline mx-1">{{user.first_name}} </span>
                     </a>
                 </div>
 
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start text-white" id="menu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                        </a>
-                    </li>
+                            <a class="nav-link align-middle px-0" href="{% url 'home' %}" >Home</a></li>
                     <li>
                         <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                             <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Profile</span> </a>
@@ -107,20 +148,43 @@
         {%block page%}
 
         <div class="col py-3">
-            Content area...
-            <img src="{{user_profile.avatar.url}}" alt="hugenerd" width="30" height="30" class="rounded-circle">
                 <h1>My Projects</h1>
-    <ul>
-        {% for project in user_projects %}
-            <li>
-                <h2>{{ project.title }}</h2>
-                <p>{{ project.description }}</p>
-                <!-- Add more project information here -->
-            </li>
+                    {% for project in user_projects %}
+                    <div class="cardcontainer">
+            <div class="photo">
+                            {% for img in imgs %}
+                {% if img.project_id == project.id and img.images_before %}
+
+                    <img src="{{ img.images_before.url }}" alt="Image Before" class="img-fluid" style="max-height: 50%;">
+                {% endif %}
+            {% endfor %}
+
+            </div>
+            <div class="content">
+                <p class="txt4">{{ project.title }}</p>
+                <p class="txt5">{{ project.creator }}</p>
+                <p class="txt2">{{ project.details }}</p>
+<!--                <p class="txt2">{{ project.catogrey }}</p>-->
+                <p class="txt2">{{ project.total_target }}</p>
+
+
+
+            </div>
+            <div class="footer">
+                <p><a class="waves-effect waves-light btn" href="#">Read More</a><a  href="{% url 'detailsproject' project.id %}"  id="arrow-up"><span class="like"><i class="fas fa-arrow-up"></i></span></a>
+</p>
+                <p class="txt3"><i class="far fa-clock"></i>{{ project.start_time }}<span class="comments"><i class="fas fa-comments"></i>{{ project.end_time }}</span></p>
+            </div>
+        </div>
+
+
+
+
         {% empty %}
             <p>You haven't created any projects yet.</p>
+              <a href="{% url 'addproject'  %}" class="btn btn-warning ">Start  a project</a>
+
         {% endfor %}
-    </ul>
 
 
         </div>

@@ -9,19 +9,24 @@ from mainproject.models import Project,Donation
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 
+from mainproject.models import Image
+
+
 # Create your views here.
 
 
-# @login_required
+@login_required
 def profile(request):
     user=request.user
     user_profile = UserProfile.objects.get(user=user)
+    imgs = Image.objects.all()
+
 
     print(user)
     user_projects = Project.objects.filter(creator_id=request.user.id)
     # return render(request, 'user/profile/base.html')
 
-    return render(request, 'user/profile/base.html', {'user_projects': user_projects, 'donations': False,'user':user,'user_profile':user_profile})
+    return render(request, 'user/profile/base.html', {'user_projects': user_projects, 'donations': False,'user':user,'user_profile':user_profile,'imgs':imgs})
 
 
     # return render(request, 'user/profile/base.html', {'projects': user_projects, 'donations': False,'user':user,'user_profile':user_profile})
