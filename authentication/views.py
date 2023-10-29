@@ -92,65 +92,6 @@ def password(request):
 
 
 
-# class HomeView(LoginRequiredMixin, TemplateView):
-#     template_name = "social_login.html"
-
-def home(request):
-    return render(request,'index.html',context={})
-
-
-
-# def register(request):
-#     form = RegisterForm(request.POST or None)
-#     if request.method == 'POST':
-#         user_profile = UserProfile.objects.get(user=request.user)
-#
-#         # Handle file upload
-#         uploaded_image = request.FILES['avatar']
-#         if uploaded_image:
-#             user_profile.avatar.save(
-#                 uploaded_image.name,
-#                 ContentFile(uploaded_image.read())
-#             )
-#             user_profile.save()
-#
-#     if form.is_valid():
-#         user = form.save()
-#         UserProfile.objects.create(user_id=user.id, avatar=user.avatar)
-#         #send activation mail
-#         send_activation_email(request, form.cleaned_data.get('email'), user)
-#
-#         return redirect("login")
-#     else:
-#         print(form.errors)  # Debug: Print form errors to the console
-#
-#     return render(request, "authentication/register.html", {"form": form})
-from django.core.files.base import ContentFile
-
-# def register(request):
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             user = form.save()
-#
-#             # Handle file upload
-#             uploaded_image = request.FILES.get('profile_image')
-#             if uploaded_image:
-#                 user_profile, created = UserProfile.objects.get_or_create(user=user)
-#                 user_profile.avatar.save(
-#                     uploaded_image.name,
-#                     ContentFile(uploaded_image.read())
-#                 )
-#                 user_profile.save()
-#
-#                 # Send activation email and redirect to login or another page
-#                 send_activation_email(request, form.cleaned_data.get('email'), user)
-#
-#             return render(request, "authentication/registeration/login.html", {"form": form})
-#     else:
-#         form = RegisterForm()
-#
-#     return render(request, "authentication/register.html", {"form": form})
 
 #
 from django.core.files.base import ContentFile
@@ -174,7 +115,7 @@ def register(request):
                 # Send activation email and redirect to login or another page
                 send_activation_email(request, form.cleaned_data.get('email'), user)
 
-            return render(request, "authentication/login.html", {"form": form})
+            return render(request, "authentication/account_activation_sent.html", {"form": form})
     else:
         form = RegisterForm()
 
@@ -191,37 +132,9 @@ def login(request):
 
 def Logout(req):
     req.session.clear()
-    return redirect(reverse('login'))
+    return redirect(reverse('home'))
 
 
-# def activate(request, uidb64, token):
-#
-#     # Decode the token
-#     uid = urlsafe_base64_decode(uidb64).decode()
-#     user = User.objects.get(pk=uid)
-#     try:
-#         uid = urlsafe_base64_decode(uidb64).decode()
-#         user = User.objects.get(pk=uid)
-#     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-#         user = None
-#     # Check if user is found and decoding is done
-#     if user and activation_token.check_token(user, token):
-#         # Activate the user
-#         user.is_active = True
-#         user.save()
-#         # TODO: Activation is done
-#         return redirect("login")
-#
-#     # TODO: Activation link is invalid
-#     else:
-#         return redirect("login")
-#
-#     # Send email confirmation
-
-# account_activation_token = AccountActivationTokenGenerator()
-
-
-# Create token object
 activation_token = TokenGenerator()
 
 

@@ -35,7 +35,7 @@ class RegisterForm(UserCreationForm):
 
     profile_image = forms.ImageField(
         label="Profile Image",
-        required=False,
+        required=True,
     )
 
     class Meta:

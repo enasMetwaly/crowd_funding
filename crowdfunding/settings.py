@@ -39,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentication.apps.AuthenticationConfig',
     'user.apps.UserConfig',
-    'mainproject.apps.MainprojectConfig',
+     # 'project.apps.ProjectConfig',
+    'mainproject',
     'homepage.apps.HomepageConfig',
 
     'rest_framework',
     'social_django',
     'crispy_forms',
+    'multiupload',
 
 ]
 
@@ -145,7 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'crowdfunding/static')
+    os.path.join(BASE_DIR, 'static/')
 ]
 
 #Media files
@@ -159,13 +161,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 AUTH_USER_MODEL = 'user.User'
 SOCIAL_AUTH_USER_MODEL = 'user.User'
-# AUTHENTICATION_BACKENDS = (
-#     'social_core.backends.facebook.FacebookOAuth2',
-#     'social_core.backends.twitter.TwitterOAuth',
-#     'social_core.backends.github.GithubOAuth2',
-#
-#     'django.contrib.auth.backends.ModelBackend',
-# )
+AUTHENTICATION_BACKENDS = [
+    # basic auth
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    # facebook auth
+    'social_core.backends.facebook.FacebookOAuth2',
+    # google auth
+    'social_core.backends.google.GoogleOAuth2',
+
+]
 ## social setup
 # Now set the default values for the LOGIN_URL, LOGOUT_URL ,LOGIN_REDIRECT_URL
 # LOGIN_REDIRECT_URL : used to redirect the user after authenticating from Django Login and Social Auth.
