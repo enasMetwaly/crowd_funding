@@ -141,6 +141,12 @@ def add_project(request):
             selected_tags = request.POST.getlist('tags')
             project.tags.set(selected_tags)  # Set the selected tags for the project
 
+            # Handle new tags
+            new_tags = request.POST.getlist('newTag')
+            for tag_name in new_tags:
+                tag, created = Tag.objects.get_or_create(name=tag_name)
+                project.tags.add(tag)
+
             images_before = request.FILES.getlist('images_before')
             images_after = request.FILES.getlist('images_after')
 
@@ -161,18 +167,7 @@ def add_project(request):
 
     return render(request, 'mainproject/add.html', {'project_form': project_form, 'pictures_form': pictures_form})
 
-# @login_required
 
-# def delete_project(request, id):
-#     project = Project.objects.get(id=id)
-#     images = Image.objects.filter(project=project)
-#     for image in images:
-#         image_path = image.images.path
-#         if os.path.exists(image_path):
-#             os.remove(image_path)
-#     images.delete()
-#     project.delete()
-#     return HttpResponseRedirect('/mainproject/list')
 
 def list_project(request):
     context={}

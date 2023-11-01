@@ -107,6 +107,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         return True
 
+    def save(self, *args, **kwargs):
+        # Check if the avatar has changed
+        try:
+            existing_user = User.objects.get(pk=self.pk)
+            if existing_user.avatar != self.avatar:
+                user_profile, created = UserProfile.objects.get_or_create(user=self)
+                user_profile.avatar = self.avatar
+                user_profile.save()
+        except User.DoesNotExist:
+            pass
+
+        super(User, self).save(*args, **kwargs)
+
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -2,36 +2,6 @@
 
 {% block project  %}
 
-  <!-- <table border="1 solid red  ">
-    <tr>
-      <th>Title</th>
-      <th>Details</th>
-      <th>Total target</th>
-      <th>Start time</th>
-      <th>End time</th>
-      <th>Pics</th>
-      <th>Delete</th>
-      <th>show</th>
-       <th>Images</th> -->
-    <!-- </tr>
-    {% for project in projects %}
-    <tr>
-        <td>{{ project.title }}</td>
-        <td>{{ project.details }}</td>
-        <td>{{ project.total_target }}</td>
-        <td>{{ project.start_time }}</td>
-        <td>{{ project.end_time }}</td>
-        <td>
-            {% for img in project.image_set.all %}
-                <img src="{{ img.images.url }}" class="project-image" alt="">
-            {% endfor %}
-        </td>
-        <td><a href="{% url 'deleteproject' project.id %}">Delete</a></td>
-        <td><a href="{% url 'detailsproject' project.id %}">Show</a></td>
-    </tr>
-    {% endfor %}
-    </table>
-</div>  -->
 <div class="mx-auto col-6">
   <a href="{% url 'addproject'  %}" class="btn btn-warning ">ADD Project NOw</a>
 </div>
@@ -42,14 +12,6 @@
     <div class="card bg-light">
       <div class="d-flex g-0">
         <div class="w-100">
-<!--          {% for img in project.image_set.all %}-->
-<!--          <img-->
-<!--            src="{{ img.images.url }}"-->
-<!--            class="rounded w-100  project-image"-->
-
-<!--            alt="{{ currentProduct.name }}"-->
-<!--          />-->
-<!--          {% endfor %}-->
              <p>Images Before</p>
                 <div class="image-container">
                     {% for image in imgs %}
