@@ -103,6 +103,10 @@ class ProjectForm(forms.ModelForm):
                 msg = "End date should be greater than start date."
                 self._errors["end_time"] = self.error_class([msg])
 
+    def __init__(self, *args, **kwargs):
+        super(ProjectForm, self).__init__(*args, **kwargs)
+        self.fields['start_time'].initial = datetime.now().strftime('%Y-%m-%dT%H:%M')
+
 
 class PicturesForm(forms.ModelForm):
     class Meta:

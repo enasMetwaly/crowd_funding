@@ -7,6 +7,7 @@ import os
 from django.forms import inlineformset_factory
 from django.contrib import admin
 from django.urls import path
+from user.models import User, UserProfile
 
 from django.contrib import admin
 from django.urls import path
@@ -198,6 +199,7 @@ def donate(request, id):
 def details_project(request, id):
     project = get_object_or_404(Project, id=id)
     user = request.user
+    user_profile = UserProfile.objects.get(user=user)
     donate = project.donation_set.all().aggregate(Sum("donation_amount"))
     donations_count = len(project.donation_set.all())
 
