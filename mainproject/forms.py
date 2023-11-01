@@ -52,25 +52,6 @@ class ProjectForm(forms.ModelForm):
 
 
 
-    # category = forms.ChoiceField(
-    #     choices=[(catogrey.id, catogrey.name) for catogrey in Catogrey.objects.all()],
-    #     widget=forms.Select(attrs={"class": "form-control"})
-    # )
-
-
-
-
-    # tags = forms.MultipleChoiceField(
-    #     choices=[(tag.id, tag.name) for tag in Tag.objects.all()],
-    #     widget=forms.SelectMultiple(attrs={"class": "form-control"}),
-    #     required=False
-    # )
-    # category = forms.ModelChoiceField(queryset=Catogrey.objects.all(),
-    #                                   widget=forms.Select(
-    #                                       attrs={
-    #                                           "class": "form-control"
-    #                                       }
-    #                                   ))
 
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),
                                           widget=forms.SelectMultiple(
@@ -85,10 +66,6 @@ class ProjectForm(forms.ModelForm):
                                           }
                                       ), required=False)
 
-    # category = forms.ChoiceField(
-    #     choices=[(catogrey.id, catogrey.name) for catogrey in Catogrey.objects.all()],
-    #     widget=forms.Select(attrs={"class": "form-control"})
-    # )
 
 
     class Meta:
@@ -151,27 +128,3 @@ class Reply_form(forms.ModelForm):
         fields = ['reply']
 
 
-# class Category_form(forms.ModelForm):
-#     class Meta:
-#         model = Catogrey
-#         fields = ['name']
-#
-# Catogries =forms.ChoiceField(choices= [ (catogrey.id, catogrey.name) for catogrey in Catogrey.objects.all() ] )
-#
-# class Meta:
-#     model = Project
-#     fields = ['title', 'details', 'total_target', 'start_time', 'end_time','tags']
-#     widgets = {
-
-#         'start_time': forms.TextInput(attrs={'type': 'datetime-local'}),
-#         'end_time': forms.TextInput(attrs={'type': 'datetime-local'}),
-#     }
-# def __init__(self, *args, **kwargs):
-#         super(ProjectForm, self).__init__(*args, **kwargs)
-#         self.fields['title'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['details'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['total_target'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['start_time'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['end_time'].widget.attrs.update({'class': 'form-control'})
-#         # self.fields['category'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['tags'].widget.attrs.update({'class': 'form-control'})
