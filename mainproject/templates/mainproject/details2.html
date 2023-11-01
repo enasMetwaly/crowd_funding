@@ -3,7 +3,6 @@
 
 {% block stylesheets %}
 <link rel="stylesheet" href="/../../../static/css/project-details.css">
-<!--<link rel="stylesheet" href="{% static 'css/project-details.css' %}">-->
 <link rel="stylesheet" href="/../../../static/css/rate.css">
 <link rel="stylesheet" href="/../../../static/css/projects-page.css">
 
@@ -15,10 +14,7 @@
 
 {% block project %}
 
-<!-- Donate Modal -->
 {% include "mainproject/donate.html" %}
-
-<!-- Delete Modal -->
 {% include "mainproject/delete_modal.html" %}
 
 <div class="container">
@@ -94,8 +90,10 @@
                         <a href="#" class="bg-light py-1 px-2 rounded">{{ tag }}</a>
                         {% endfor %}
                     </div>
-
                     <hr class="my-4"/>
+                    
+
+
                     <!-- Related Projects -->
                     <h4 class="">Related Projects:</h4>
                     <div class="col-md-12 d-flex justify-content-around py-3 flex-wrap">
@@ -128,7 +126,7 @@
                 <li class="">
                   <div class="comment d-flex">
                     <div class="col-md-1">
-                      <img class="rounded-circle img-thumbnail" src="{{user_profile.avatar.url}}" style="width: 60px;height:60px;"/>
+                      <img class="rounded-circle " src="{{user_profile.avatar.url}}" style="width: 60px;height:60px;"/>
                     </div>
                     <div class="col-md-8 mx-3">
                       <h6 class="comment-header mb-0 d-flex">
@@ -309,16 +307,13 @@
 
 </section>
 <style>
-    /* Move the previous and next arrow controls outside the image containers */
     .carousel-control-prev, .carousel-control-next {
-        opacity: 0; /* Initially hide them */
+        opacity: 0; 
         transition: opacity 0.2s;
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
     }
-
-    /* Show the arrow controls on hover */
     .image-container:hover .carousel-control-prev, .image-container:hover .carousel-control-next {
         opacity: 1;
     }

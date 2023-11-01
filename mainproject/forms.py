@@ -2,7 +2,6 @@ from django import forms
 from .models import *
 from django.forms.widgets import NumberInput
 from datetime import datetime
-from django.forms import inlineformset_factory
 
 
 class ProjectForm(forms.ModelForm):
@@ -51,14 +50,14 @@ class ProjectForm(forms.ModelForm):
         ))
 
 
-
-
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),
                                           widget=forms.SelectMultiple(
                                               attrs={
                                                   "class": "form-control"
                                               }
                                           ), required=False)
+    
+
     category = forms.ModelChoiceField(queryset=Catogrey.objects.all(),
                                       widget=forms.Select(
                                           attrs={
@@ -67,15 +66,15 @@ class ProjectForm(forms.ModelForm):
                                       ), required=False)
 
 
-
     class Meta:
-        model = Image  # Replace with your actual Image model
+        model = Image  
         fields = ['images_before', 'images_after']
+
 
     images = forms.FileField(
         widget=forms.ClearableFileInput(attrs={'style': 'display: none'}),
-        label="Images",  # Changed label to plural
-        required=False  # If you want to make it optional
+        label="Images",  
+        required=False  
     )
 
 
@@ -102,6 +101,7 @@ class ProjectForm(forms.ModelForm):
             if end_date <= start_date:
                 msg = "End date should be greater than start date."
                 self._errors["end_time"] = self.error_class([msg])
+
 
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)

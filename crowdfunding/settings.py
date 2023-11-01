@@ -39,10 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentication.apps.AuthenticationConfig',
     'user.apps.UserConfig',
-     # 'project.apps.ProjectConfig',
     'mainproject',
-    'homepage.apps.HomepageConfig',
-
     'rest_framework',
     'social_django',
     'crispy_forms',
@@ -142,8 +139,6 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# STATIC_URL = 'static/'
-# STATICFILES_DIRS=['static']
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [

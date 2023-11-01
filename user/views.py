@@ -20,29 +20,17 @@ def profile(request):
     user=request.user
     user_profile = UserProfile.objects.get(user=user)
     imgs = Image.objects.all()
-
-
-    print(user)
     user_projects = Project.objects.filter(creator_id=request.user.id)
-    # return render(request, 'user/profile/base.html')
-
     return render(request, 'user/profile/base.html', {'user_projects': user_projects, 'donations': False,'user':user,'user_profile':user_profile,'imgs':imgs})
 
 
-    # return render(request, 'user/profile/base.html', {'projects': user_projects, 'donations': False,'user':user,'user_profile':user_profile})
 
 @login_required
-#
 def donations(request):
-    # Get the user's donations
+
     user_donations = Donation.objects.filter(user=request.user)
-
-    # Extract the projects from the user's donations
     project_ids = user_donations.values_list('project_id', flat=True)
-
-    # Query the Project model to retrieve the associated projects
     projects = Project.objects.filter(id__in=project_ids)
-
     return render(request, 'user/profile/user_donation.html', {
         'user_donations': user_donations,
         'projects': projects,
@@ -69,12 +57,10 @@ def edit_profile(request):
 def delete_user_account(request):
     if request.method == 'POST':
         password = request.POST.get('password')
-
         if request.user.check_password(password):
-            # Password is correct, proceed with account deletion
             request.user.delete()
             messages.success(request, "Your account has been deleted.")
-            return redirect('home')  # Redirect to the homepage or a suitable URL
+            return redirect('home')  
         else:
             messages.error(request, "Incorrect password. Account not deleted.")
 

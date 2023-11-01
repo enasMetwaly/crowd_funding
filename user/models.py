@@ -108,7 +108,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return True
 
     def save(self, *args, **kwargs):
-        # Check if the avatar has changed
         try:
             existing_user = User.objects.get(pk=self.pk)
             if existing_user.avatar != self.avatar:

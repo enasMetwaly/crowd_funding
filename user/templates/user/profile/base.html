@@ -7,14 +7,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{%static 'assets/favicon.ico'%}" />
-        <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{%static 'css/styles.css'%}" rel="stylesheet " />
         <link href="{%static 'css/user/donation.css'%}" rel="stylesheet " />
                 <link href="{% static 'css/user/user_project.css' %}" rel="stylesheet">
@@ -23,33 +19,27 @@
 
         {% endblock styles%}
 <style>
-    /* Add this CSS to remove the underline from the link */
     a  {
-    text-decoration: none; /* Remove the underline on normal state */
-    font-size: 1rem; /* Set the default font size */
+    text-decoration: none;
+    font-size: 1rem;
 
     }
     a:hover{
-        text-decoration: none; /* Remove the underline on hover state */
-    font-size: 1.4rem; /* Set the larger font size on hover */
+        text-decoration: none;
+    font-size: 1.4rem;
 
     }
     ul{
         list-style: none;
 
     }
-   
-    /* Remove underline from links in the sidebar when hovered or clicked */
-    a, a:hover, a:active, a:focus {
+       a, a:hover, a:active, a:focus {
         text-decoration: none;
     }
-
-    /* Set text color to white for links in the sidebar */
     a, a:hover, a:active, a:focus {
         color: white;
     }
 
-    /* Set the larger font size on hover for links */
     a:hover {
         font-size: 1.4rem;
     }
@@ -73,7 +63,6 @@
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                                 <div class="dropdown pb-4">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-<!--                        <img src="   {{user_profile.avatar.url}}" alt="hugenerd" width="60" height="60" class="rounded-circle">-->
                         <img src="   {{user_profile.avatar.url}}" alt="hugenerd" width="60" height="60" class="rounded-circle">
 
                         <span class="d-none d-sm-inline mx-1">{{user.first_name}} </span>
@@ -164,7 +153,6 @@
                 <p class="txt4">{{ project.title }}</p>
                 <p class="txt5">{{ project.creator }}</p>
                 <p class="txt2">{{ project.details }}</p>
-<!--                <p class="txt2">{{ project.catogrey }}</p>-->
                 <p class="txt2">{{ project.total_target }}</p>
 
 
@@ -192,7 +180,6 @@
 
     </div>
 </div>
-        <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -201,12 +188,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 
 </body>

@@ -13,11 +13,6 @@
         </li>
         {% for donation in user_donations %}
             <li>
-<!--                <a href="{% url 'detailsproject' donation.project.id %}">  &lt;!&ndash; Link to project details &ndash;&gt;-->
-<!--                    {{ donation.project.title }}-->
-<!--                </a>-->
-<!--                <p>Donation Amount: ${{ donation.donation_amount }}</p>-->
-                <!-- Add more donation information here -->
 <div class="col-xl-12 col-lg-10">
                 <div class="card l-bg-blue-dark">
                     <div class="card-statistic-3 p-4">
@@ -43,7 +38,6 @@
                                 <i class="fa fa-arrow-up" style="color: white;"></i>
                                 </a>
 
-<!--                                <a >2.5% <i class="fa fa-arrow-up"></i></a>-->
                             </div>
                         </div>
                         <div class="progress mt-1 " data-height="8" style="height: 8px;">
@@ -59,15 +53,14 @@
     </ul>
  </div>
 <style>
-    /* Add this CSS to remove the underline from the link */
     a  {
-    text-decoration: none; /* Remove the underline on normal state */
-    font-size: 1rem; /* Set the default font size */
+    text-decoration: none; 
+    font-size: 1rem; 
 
     }
     a:hover{
-        text-decoration: none; /* Remove the underline on hover state */
-    font-size: 1.4rem; /* Set the larger font size on hover */
+        text-decoration: none; 
+    font-size: 1.4rem; 
 
     }
     ul{

@@ -42,8 +42,6 @@
           <p class="">Start time: {{ currentProduct.created_at }}</p>
           <p class="">End time: {{ project.end_time }}</p>
           <p class="">Author: {{ project.creator }}</p>
-
-<!--          <a href="{% url 'deleteproject' project.id %}"  class="btn btn-primary mt-3 btn-lg">Delete</a>-->
           <a href="{% url 'detailsproject' project.id %}" class="btn btn-primary mt-3 btn-lg">Show</a>
         </div>
       </div>
@@ -53,8 +51,8 @@
 </div>
 <style>
   .project-image {
-      width: 500px;  /* Adjust the maximum width as needed */
-      height: 500px;      /* Maintain aspect ratio */
+      width: 500px;  
+      height: 500px;  
   }
 </style>
 {% endblock %}
